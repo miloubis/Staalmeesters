@@ -1,1 +1,1 @@
-In this directory you can find useful literature about rectangle packing and algorithms.
+In this directory you can find useful literature for the 'staalmeester' case
