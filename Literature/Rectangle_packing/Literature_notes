@@ -1,0 +1,3 @@
+The best-fit heuristic for the rectangular strip packing problem: An efficient implementation and the worst-case approximation ratio
+This article has interesting ideas on how to store each rectangle's place in the strip in a program. Double linked lists (x coordinates)
+or heaps (y coordinate)
