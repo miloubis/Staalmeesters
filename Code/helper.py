@@ -33,4 +33,7 @@ def max_length(orderlist):
         maxLength += max(orderlist[i][0], orderlist[i][1])
     return maxLength
 
+def rotation(subOrder):
+    subOrder[0], subOrder[1] = subOrder[1], subOrder[0]
+
 
