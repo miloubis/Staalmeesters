@@ -17,8 +17,13 @@ class Order:
 
 def Area(orderlist):
     area = 0
-    for i in range(len(orderlist)):
-        area += orderlist[i][0] * orderlist[i][1]
+    if len(orderlist[0]) == 2 or orderlist[2] == str:
+        for i in range(len(orderlist)):
+            area += orderlist[i][0] * orderlist[i][1]
+    else:
+        for i in range(len(orderlist)):
+            area += ((orderlist[i][0] * orderlist[i][1]) / 2)
+    print area
     return area
 
 def MaxLength(orderlist):
