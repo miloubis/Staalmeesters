@@ -200,7 +200,6 @@ order3 = Order(orderlist[43:67])
 order4 = Order(orderlist[68:88])
 order5 = Order(orderlist[89:141])
 order6 = Order(orderlist[142:185])
-print order1
 
 
 
