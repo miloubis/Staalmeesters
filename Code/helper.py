@@ -6,6 +6,7 @@ This file contains the class 'Order' which holds every useful attribute of an or
 includes every function necessary for a certain algorithm.
 
 """
+import numpy as np
 
 class Order:
     """" In this class all useful attributes for an order are saved """
@@ -35,5 +36,20 @@ def max_length(orderlist):
 
 def rotation(subOrder):
     subOrder[0], subOrder[1] = subOrder[1], subOrder[0]
+
+def search(mogelijkeBreedte, overigeOrders):
+    np.zeros((100, mogelijkeBreedte))
+    rowPosition = 0
+    colPosition = 0
+    bestFit = []
+    for i in range(1, len(overigeOrders)):
+        try:
+        roll[]
+
+
+
+
+
+
 
 
