@@ -54,6 +54,30 @@ def search(possibleWidth, remainingOrders):
                 bestFit = subOrder
     return bestFit
 
+def sortshort(orderlist):
+    for i in range(len(orderlist)):
+        if orderlist[i][0] > orderlist[i][1]:
+            orderlist[i][0], orderlist[i][1] = orderlist[i][1], orderlist[i][0]
+    return orderlist
+
+def sortlong(orderlist):
+    for i in range(len(orderlist)):
+        if orderlist[i][0] < orderlist[i][1]:
+            orderlist[i][0], orderlist[i][1] = orderlist[i][1], orderlist[i][0]
+    return orderlist
+
+def sortarea(orderlist):
+    areas = []
+    orderedlist = []
+    for i in range(len(orderlist)):
+        areas = areas.extent(orderlist[i][0]*orderlist[i][1])
+    for i in range(len(orderlist)):
+        index = areas.index(max(areas))
+        orderedlist = orderedlist.append(orderlist[index])
+        del areas[index]
+    return orderedlist
+
+
 
 
 
