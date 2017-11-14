@@ -35,16 +35,18 @@ def max_length(orderlist):
     return maxLength
 
 def rotation(subOrder):
-    subOrder[0], subOrder[1] = subOrder[1], subOrder[0]
+    rotateOrder = np.transpose(subOrder)
+    return rotateOrder
+    
+def search(possibleWidth, remainingOrders):
+    widthArray = np.zeros((100, possibleWidth))
+    bestFit = np.zeros((5, 5))
+    for i in range(len(remainingOrders)):
+        subOrder = np.ones((remainingOrders[i][0], remainingOrders[i][1]))
+        if subOrder.size(axis=1) <= widthArray.size(axis=1):
+            bestFit = subOrder
 
-def search(mogelijkeBreedte, overigeOrders):
-    np.zeros((100, mogelijkeBreedte))
-    rowPosition = 0
-    colPosition = 0
-    bestFit = []
-    for i in range(1, len(overigeOrders)):
-        try:
-        roll[]
+
 
 
 
