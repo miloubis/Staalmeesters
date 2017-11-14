@@ -37,14 +37,25 @@ def max_length(orderlist):
 def rotation(subOrder):
     rotateOrder = np.transpose(subOrder)
     return rotateOrder
-    
+
 def search(possibleWidth, remainingOrders):
-    widthArray = np.zeros((100, possibleWidth))
-    bestFit = np.zeros((5, 5))
+    widthArray = np.zeros(100, possibleWidth)
+    bestFit = np.zeros((0, 0))
     for i in range(len(remainingOrders)):
         subOrder = np.ones((remainingOrders[i][0], remainingOrders[i][1]))
-        if subOrder.size(axis=1) <= widthArray.size(axis=1):
+        if subOrder.size(axis=1) <= widthArray.size(axis=1) & subOrder.size(axis=1) > bestFit.size(axis=1):
             bestFit = subOrder
+            rotation(subOrder)
+            if subOrder.size(axis=1) <= widthArray.size(axis=1) & subOrder.size(axis=1) > bestFit.size(axis=1):
+                bestFit = subOrder
+        else:
+            rotation(subOrder)
+            if subOrder.size(axis=1) <= widthArray.size(axis=1) & subOrder.size(axis=1) > bestFit.size(axis=1):
+                bestFit = subOrder
+    return bestFit
+
+
+
 
 
 
