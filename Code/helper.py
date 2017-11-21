@@ -39,20 +39,36 @@ def rotation(subOrder):
     return rotateOrder
 
 def search(possibleWidth, remainingOrders):
-    widthArray = np.zeros(100, possibleWidth)
-    bestFit = np.zeros((0, 0))
+    """ This is the search funtion for the best fitting sub order in an (remaining) order list. It searches in a
+    sorted list of lists which is either sorted based on the long side, short side or acreage. It returns a best
+    fitting sub order when 1) the order has the maximum possible with. For example possible width is 5 and the
+    best fit numpy array has 5 columns. Or 2) when each possibility is tried and the resulting best fitting order
+    has an as close as possible width (columns) to the possible width. For example, possible width is 5 and the
+    remaining orders have a width of 1, 2 , 3, 4 than 4 is the clostest width to the possible width. """
+
+    # initiate bestFit array
+    bestFit = []
+
+    # Sort method can be changed to sortlong, sortshort or sortarea.
     sortedOrders = sortlong(remainingOrders)
+
     for i in range(len(sortedOrders)):
         subOrder = np.ones((sortedOrders[i][0], sortedOrders[i][1]))
-        if subOrder.size(axis=1) <= widthArray.size(axis=1) & subOrder.size(axis=1) > bestFit.size(axis=1):
+        print subOrder.shape
+        if subOrder.shape[1] <= possibleWidth & subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
-            rotation(subOrder)
-            if subOrder.size(axis=1) <= widthArray.size(axis=1) & subOrder.size(axis=1) > bestFit.size(axis=1):
+            subOrder = rotation(subOrder)
+            if subOrder.shape[1] <= possibleWidth & subOrder.shape[1] > bestFit.shape[1]:
                 bestFit = subOrder
         else:
-            rotation(subOrder)
-            if subOrder.size(axis=1) <= widthArray.size(axis=1) & subOrder.size(axis=1) > bestFit.size(axis=1):
+            subOrder = rotation(subOrder)
+            if subOrder.shape[1] <= possibleWidth & subOrder.shape[1] > bestFit.shape[1]:
                 bestFit = subOrder
+
+        # If maximum width of array is reached break loop and return bestFit
+        if bestFit.shape[1] == possibleWidth:
+            break
+            
     return bestFit
 
 def sortshort(orderlist):
@@ -62,10 +78,8 @@ def sortshort(orderlist):
         if orderlist[i][0] > orderlist[i][1]:
             orderlist[i][0], orderlist[i][1] = orderlist[i][1], orderlist[i][0]
     firstelement = map(lambda x: x[0], orderlist)
-    print firstelement
     for i in range(len(orderlist)):
         index = firstelement.index(max(firstelement))
-        print index
         orderedlist.append(orderlist[index])
         del firstelement[index]
         del orderlist[index]
@@ -78,10 +92,8 @@ def sortlong(orderlist):
         if orderlist[i][0] < orderlist[i][1]:
             orderlist[i][0], orderlist[i][1] = orderlist[i][1], orderlist[i][0]
     firstelement = map(lambda x: x[0], orderlist)
-    print firstelement
     for i in range(len(orderlist)):
         index = firstelement.index(max(firstelement))
-        print index
         orderedlist.append(orderlist[index])
         del firstelement[index]
         del orderlist[index]
