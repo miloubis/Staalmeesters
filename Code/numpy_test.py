@@ -25,7 +25,9 @@ row_pos = 0
 
 for i in range(1,len(orders)):
     roll[row_pos:row_pos + orders[i-1][0], column_pos:orders[i][1]] = i
+    print ("--------------------------{}--------------------------".format(column_pos))
     row_pos += orders[i][0]
+    print ("--------------------------{}--------------------------".format(row_pos))
     # print(i[0])
 
 
