@@ -8,6 +8,12 @@ includes every function necessary for a certain algorithm.
 """
 import numpy as np
 
+# Define constants
+ROLL_A = 500
+ROLL_B = 520
+ROLL_C = 550
+
+# Create order class with useful attributes
 class Order:
     """" In this class all useful attributes for an order are saved """
 
@@ -47,14 +53,13 @@ def search(possibleWidth, remainingOrders):
     remaining orders have a width of 1, 2 , 3, 4 than 4 is the clostest width to the possible width. """
 
     # initiate bestFit array
-    bestFit = []
+    bestFit = np.zeros((0, 0))
 
     # Sort method can be changed to sortlong, sortshort or sortarea.
     sortedOrders = sortlong(remainingOrders)
 
     for i in range(len(sortedOrders)):
         subOrder = np.ones((sortedOrders[i][0], sortedOrders[i][1]))
-        print subOrder.shape
         if subOrder.shape[1] <= possibleWidth & subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
             subOrder = rotation(subOrder)
@@ -68,7 +73,7 @@ def search(possibleWidth, remainingOrders):
         # If maximum width of array is reached break loop and return bestFit
         if bestFit.shape[1] == possibleWidth:
             break
-            
+
     return bestFit
 
 def sortshort(orderlist):
