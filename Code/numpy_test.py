@@ -22,13 +22,20 @@ row_pos = 0
 # roll[row_pos:row_pos + orders[3][0], column_pos:orders[3][1]] = 4
 # row_pos += orders[3][0]
 # roll[row_pos:row_pos + orders[4][0], column_pos:orders[4][1]] = 5
+# row_pos += orders[4][0]
 
+<<<<<<< HEAD
 for i in range(1,len(orders)):
     roll[row_pos:row_pos + orders[i-1][0], column_pos:orders[i][1]] = i
     print ("--------------------------{}--------------------------".format(column_pos))
     row_pos += orders[i][0]
     print ("--------------------------{}--------------------------".format(row_pos))
     # print(i[0])
+=======
+for i in range(1,len(orders)+1):
+    roll[row_pos:row_pos + orders[i - 1][0], column_pos:orders[i - 1][1]] = i
+    row_pos += orders[i - 1][0]
+>>>>>>> eef2d4ff235902c25204e7473421c27ad6736710
 
 
 # for x in np.nditer(roll, op_flags=['readwrite']):
@@ -38,4 +45,4 @@ for i in range(1,len(orders)):
          # for i in orderlist:
          #    roll[0:orderlist[0][0], 0:orderlist[0][1]] = 1
 
-print(roll)
+# print(roll)

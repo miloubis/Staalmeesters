@@ -7,7 +7,9 @@ order1 = order1.orderlist
 maxLengthRoll = order1.maxLengthRoll / 10
 rollC = np.zeros((maxLengthRoll,55))
 
+def search_skyline(rollC, heights):
+	heights = 
 
-
-
-def pack(order)
+def pack(bestFit, rollC):
+	skyline_width=rollC.size
+	rollC=np.append(rollC(), bestFit, axis=1)
