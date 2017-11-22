@@ -1,6 +1,6 @@
 # Tech Assistance
 
-## Status week 4
+### Status week 4
 IDEA categories | Score
 --------------- | -------------
 Infrastructure  | 2
@@ -8,11 +8,12 @@ Datastructure   | 1
 Algorithms      | 1
 Experimentation | 0
 
-## Processed feedback:
+### Processed feedback
 - [x] Infrastructuur (readme en gitignore)
 - [ ] Datastructuur (aparte files aanmaken: main, helper, classes)
 - [x] Experimentatie (best fit op twee manieren)
 - [ ] Algoritme (best fit algortime werkend)
+
 
 ## 1 Infrastructure
 ### README
