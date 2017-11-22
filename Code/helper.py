@@ -7,38 +7,12 @@ includes every function necessary for a certain algorithm.
 
 """
 import numpy as np
+from classes import *
 
 # Define constants
 ROLL_A = 500
 ROLL_B = 520
 ROLL_C = 550
-
-# Create order class with useful attributes
-class Order:
-    """" In this class all useful attributes for an order are saved """
-
-    def __init__(self, orderlist):
-        self.orderlist = orderlist
-        self.totalArea = area(orderlist)
-        self.maxLengthRoll = max_length(orderlist)
-
-    def area(orderlist):
-        totalArea = 0
-        if len(orderlist[0]) == 2 or isinstance(orderlist[0][2], str):
-            for i in range(len(orderlist)):
-                totalArea += orderlist[i][0] * orderlist[i][1]
-
-        # 0.5 * basis * hoogte --> geen rechthoekige driehoeken wat betekenen de 3 cijfers?
-        else:
-            for i in range(len(orderlist)):
-                totalArea += ((orderlist[i][0] * orderlist[i][1]) / 2)
-        return totalArea
-
-    def max_length(orderlist):
-        maxLength = 0
-        for i in range(len(orderlist)):
-            maxLength += max(orderlist[i][0], orderlist[i][1])
-        return maxLength
 
 def rotation(subOrder):
     rotateOrder = np.transpose(subOrder)
@@ -76,46 +50,41 @@ def search(possibleWidth, remainingOrders):
 
     return bestFit
 
-def sortshort(orderlist):
-    """Sorts an orderlist according to smallest side from larger to smaller"""
-    orderedlist = []
-    for i in range(len(orderlist)):
-        if orderlist[i][0] > orderlist[i][1]:
-            orderlist[i][0], orderlist[i][1] = orderlist[i][1], orderlist[i][0]
-    firstelement = map(lambda x: x[0], orderlist)
-    for i in range(len(orderlist)):
-        index = firstelement.index(max(firstelement))
-        orderedlist.append(orderlist[index])
-        del firstelement[index]
-        del orderlist[index]
-    return orderedlist
+def Skyline(roll):
+    """ Find the lowest skyline. The row in which this skyline is located, the column at which the skyline starts
+    and how many columns the skyline covers. """
+    row = 0
+    startingCol = 0
+    columns = 0
+    skyline = []
+    find = False
+    for i in range(roll.shape[0]):
+        row = i
+        for j in range(roll.shape[1]):
+            if columns == 0:
+                startingCol = j
+            if roll[i][j] == 0:
+                columns += 1
+            if columns != 0 & int(roll[i][j] != 0):
+                skyline.append(row)
+                skyline.append(startingCol)
+                skyline.append(columns)
+                find = True
+            if find:
+                break
+        if find:
+            break
+    return skyline
 
-def sortlong(orderlist):
-    """ Sorts an orderlistlist according to largest side from larger to smaller"""
-    orderedlist = []
-    for i in range(len(orderlist)):
-        if orderlist[i][0] < orderlist[i][1]:
-            orderlist[i][0], orderlist[i][1] = orderlist[i][1], orderlist[i][0]
-    firstelement = map(lambda x: x[0], orderlist)
-    for i in range(len(orderlist)):
-        index = firstelement.index(max(firstelement))
-        orderedlist.append(orderlist[index])
-        del firstelement[index]
-        del orderlist[index]
-    return orderedlist
+def pack(roll, skyline, bestFit, orderNum):
+    """ Pack the best fitting sub-order in the roll """
+    row = skyline[0]
+    startingCol = skyline[1]
+    for i in range(bestFit.shape[0]):
+        for j in range(bestFit.shape[1]):
+            roll[row + i][startingCol + j] = orderNum
+    return roll
 
-def sortarea(orderlist):
-    """Sorts an orderlist according to area from larger to smaller"""
-    areas = []
-    orderedlist = []
-    for i in range(len(orderlist)):
-        areas.append(orderlist[i][0]*orderlist[i][1])
-    for i in range(len(orderlist)):
-        index = areas.index(max(areas))
-        orderedlist.append(orderlist[index])
-        del areas[index]
-        del orderlist[index]
-    return orderedlist
 
 # MOGEN WE SORT CODE GEBRUIKEN???
 # def mergesort(orderlist):

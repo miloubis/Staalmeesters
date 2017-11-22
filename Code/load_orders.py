@@ -5,7 +5,7 @@ Staalmeester case
 This is a test file to load an order into the class Order and do some experiments/tests with it
 """
 
-from helper import *
+from classes import *
 
 orderlist = [
   ["Order1"],
