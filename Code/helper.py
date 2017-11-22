@@ -34,14 +34,14 @@ def search(possibleWidth, remainingOrders):
 
     for i in range(len(sortedOrders)):
         subOrder = np.ones((sortedOrders[i][0], sortedOrders[i][1]))
-        if subOrder.shape[1] <= possibleWidth & subOrder.shape[1] > bestFit.shape[1]:
+        if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
             subOrder = rotation(subOrder)
-            if subOrder.shape[1] <= possibleWidth & subOrder.shape[1] > bestFit.shape[1]:
+            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
                 bestFit = subOrder
         else:
             subOrder = rotation(subOrder)
-            if subOrder.shape[1] <= possibleWidth & subOrder.shape[1] > bestFit.shape[1]:
+            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
                 bestFit = subOrder
 
         # If maximum width of array is reached break loop and return bestFit
@@ -55,23 +55,24 @@ def Skyline(roll):
     and how many columns the skyline covers. """
     row = 0
     startingCol = 0
-    columns = 0
+    counter = 0
     skyline = []
     find = False
+
     for i in range(roll.shape[0]):
-        row = i
         for j in range(roll.shape[1]):
-            if columns == 0:
+            if counter == 0:
+                row = i
                 startingCol = j
-            if roll[i][j] == 0:
-                columns += 1
-            if columns != 0 & int(roll[i][j] != 0):
+            if counter != 0 and (row != i or roll[i][j] != 0):
                 skyline.append(row)
                 skyline.append(startingCol)
-                skyline.append(columns)
+                skyline.append(counter)
                 find = True
             if find:
                 break
+            if roll[i][j] == 0:
+                counter += 1
         if find:
             break
     return skyline

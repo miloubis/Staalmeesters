@@ -1,3 +1,4 @@
+import copy
 # Create order class with useful attributes
 class Order:
     """" In this class all useful attributes for an order are saved """
@@ -28,40 +29,46 @@ def max_length(orderlist):
 def sortshort(orderlist):
     """Sorts an orderlist according to smallest side from larger to smaller"""
     orderedlist = []
-    for i in range(len(orderlist)):
-        if orderlist[i][0] > orderlist[i][1]:
-            orderlist[i][0], orderlist[i][1] = orderlist[i][1], orderlist[i][0]
-    firstelement = map(lambda x: x[0], orderlist)
-    for i in range(len(orderlist)):
+    indexableOrders = copy.copy(orderlist)
+    for i in range(len(indexableOrders)):
+        if indexableOrders[i][0] > indexableOrders[i][1]:
+            indexableOrders[i][0], indexableOrders[i][1] = indexableOrders[i][1], indexableOrders[i][0]
+    firstelement = list(map(lambda x: x[0], indexableOrders))
+
+    for i in range(len(indexableOrders)):
         index = firstelement.index(max(firstelement))
-        orderedlist.append(orderlist[index])
+        orderedlist.append(indexableOrders[index])
         del firstelement[index]
-        del orderlist[index]
+        del indexableOrders[index]
     return orderedlist
+
 
 def sortlong(orderlist):
     """ Sorts an orderlistlist according to largest side from larger to smaller"""
     orderedlist = []
-    for i in range(len(orderlist)):
-        if orderlist[i][0] < orderlist[i][1]:
-            orderlist[i][0], orderlist[i][1] = orderlist[i][1], orderlist[i][0]
-    firstelement = map(lambda x: x[0], orderlist)
-    for i in range(len(orderlist)):
+    indexableOrders = copy.copy(orderlist)
+    for i in range(len(indexableOrders)):
+        if indexableOrders[i][0] < indexableOrders[i][1]:
+            indexableOrders[i][0], indexableOrders[i][1] = indexableOrders[i][1], indexableOrders[i][0]
+    firstelement = list(map(lambda x: x[0], indexableOrders))
+
+    for i in range(len(indexableOrders)):
         index = firstelement.index(max(firstelement))
-        orderedlist.append(orderlist[index])
+        orderedlist.append(indexableOrders[index])
         del firstelement[index]
-        del orderlist[index]
+        del indexableOrders[index]
     return orderedlist
 
 def sortarea(orderlist):
     """Sorts an orderlist according to area from larger to smaller"""
     areas = []
     orderedlist = []
-    for i in range(len(orderlist)):
-        areas.append(orderlist[i][0]*orderlist[i][1])
-    for i in range(len(orderlist)):
+    indexableOrders = copy.copy(orderlist)
+    for i in range(len(indexableOrders)):
+        areas.append(indexableOrders[i][0]*indexableOrders[i][1])
+    for i in range(len(indexableOrders)):
         index = areas.index(max(areas))
-        orderedlist.append(orderlist[index])
+        orderedlist.append(indexableOrders[index])
         del areas[index]
-        del orderlist[index]
+        del indexableOrders[index]
     return orderedlist
