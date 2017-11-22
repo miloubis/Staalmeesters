@@ -1,4 +1,5 @@
-Code\helper.pyc
 *.pyc
 *.xml
 *.iml
+tests_leo.py
+test.py
