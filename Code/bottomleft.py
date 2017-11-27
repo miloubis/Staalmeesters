@@ -32,8 +32,8 @@ def bottom_left(roll):
     possibleWidth = 0
     find = False
 
-    for k in range(maxLengthRoll):
-        for i in range(widthRoll):
+    for k in range(len(maxLengthRoll)):
+        for i in range(len(widthRoll)):
             if roll[k][i] == 0:
             column += i + 1
     for j in range(widthRoll):
