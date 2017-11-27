@@ -19,6 +19,8 @@ for i in range(len(orderlist)):
 
 print(dividedOrderlist)
 
+bottom_left(rollC)
+
 # search for empty space
 def bottom_left(roll):
     """ 
@@ -28,31 +30,17 @@ def bottom_left(roll):
 
     row = 0
     column = 0
-    counter = 0
-    bottomleft = []
+    possibleWidth = 0
+    find = False
 
-    for i in range(widthRoll):
-    	if roll[0][i]==0:
-    		column += i+1
-    		for j in range(widthRoll):
-    			if roll[0][j] != 0 or roll[0][j] is out of range:
-    				possibleWidth = j+1
-    		for n in range(maxLengthRoll):
-    			if 
-    		
-
-
-
-
-
-
-
-# print(rollC.shape[1])
-
-# iterate through orderlist
-# for i in range(len(orderlist)):
-#     print(orderlist[i])
-
-# length = rollC.shape[0]
-# width = rollC.shape[1]
-
+    for k in range(maxLengthRoll):
+	    for i in range(widthRoll):
+	    	if roll[k][i]==0:
+	    		column += i+1
+	    		for j in range(widthRoll):
+	    			if roll[k][j] != 0 or j == widthRoll:
+	    				possibleWidth = j+1
+	    				return possibleWidth, column, row
+	    				find = True
+	    if find:
+	    	break
