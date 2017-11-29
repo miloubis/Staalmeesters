@@ -56,8 +56,8 @@ def pack(sortedlist, possibleWidth, rowpos, columnpos):
             rollC[rowpos: height, columnpos: width] = i + 1
     # return [rowpos:width, columnpos:length]
 
-
-# pack(sortedlist, possibleWidth, rowpos, columnpos)
+bottom_left(rollC)
+pack(sortedlist, possibleWidth, rowpos, columnpos)
 
 np.set_printoptions(threshold=100000, linewidth=350)
 # print(rollC)
