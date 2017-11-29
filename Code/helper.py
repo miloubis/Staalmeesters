@@ -29,8 +29,8 @@ def search(possibleWidth, remainingOrders):
     # initiate bestFit array
     bestFit = np.zeros((0, 0))
 
-    # Sort method can be changed to sortlong, sortshort or sortarea.
-    sortedOrders = sortlong(remainingOrders)
+    # Sort method can be changed to sort_long, sort_short or sort_area.
+    sortedOrders = sort_long(remainingOrders)
 
     for i in range(len(sortedOrders)):
         subOrder = np.ones((sortedOrders[i][0], sortedOrders[i][1]))
@@ -51,19 +51,24 @@ def search(possibleWidth, remainingOrders):
     return bestFit
 
 def Skyline(roll):
-    """ Find the lowest skyline. The row in which this skyline is located, the column at which the skyline starts
-    and how many columns the skyline covers. """
+    """
+    Find the lowest skyline. The row in which this skyline is located, the column at which the skyline starts
+    and how many columns the skyline covers.
+    """
     row = 0
     startingCol = 0
     counter = 0
     skyline = []
     find = False
+    k = 0
 
     for i in range(roll.shape[0]):
         for j in range(roll.shape[1]):
             if counter == 0:
                 row = i
                 startingCol = j
+
+            # Skyline[0] the row in which the skyline lies, skyline[1] the column and skyline[2] the width of skyline
             if counter != 0 and (row != i or roll[i][j] != 0):
                 skyline.append(row)
                 skyline.append(startingCol)
@@ -77,8 +82,33 @@ def Skyline(roll):
             break
     return skyline
 
+def fill(roll, skyline):
+    '''
+    Where the roll has zero's in which no sub order fits. We will fill that space with 999
+    :param roll: the roll in which the orders are placed
+    :param skyline: contains the values at which the skyline starts and the width of that skyline where no order fits
+    :return: a filled roll
+    '''
+    row = skyline[0]
+    startingCol = skyline[1]
+    possibleWidth = skyline[2]
+    filler = 999
+    for i in range(roll.shape[0]):
+        if roll[row + i][startingCol - 1] == 0:
+            break
+        for j in range(possibleWidth):
+            roll[row + i][startingCol + j] = filler
+    return roll
+
 def pack(roll, skyline, bestFit, orderNum):
-    """ Pack the best fitting sub-order in the roll """
+    """
+    Pack the best fitting sub order into the roll
+    :param roll: the roll in which is order must be placed
+    :param skyline: a list of values indicating the starting row and column at which the order must be placed.
+    :param bestFit: an numpy array of the best fitting order
+    :param orderNum: the number of the order being placed
+    :return:
+    """
     row = skyline[0]
     startingCol = skyline[1]
     for i in range(bestFit.shape[0]):

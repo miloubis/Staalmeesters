@@ -5,29 +5,32 @@ class Order:
 
     def __init__(self, orderlist):
         self.orderlist = orderlist
-        self.totalArea = area(orderlist)
-        self.maxLengthRoll = max_length(orderlist)
+        self.totalArea = self.area(orderlist)
+        self.maxLengthRoll = self.max_length(orderlist)
+        #self.area = area(orderlist)
 
-def area(orderlist):
-    totalArea = 0
-    if len(orderlist[0]) == 2 or isinstance(orderlist[0][2], str):
+    def area(self, orderlist):
+        totalArea = 0
+        if len(orderlist[0]) == 2 or isinstance(orderlist[0][2], str):
+            for i in range(len(orderlist)):
+                totalArea += orderlist[i][0] * orderlist[i][1]
+
+        # 0.5 * basis * hoogte --> geen rechthoekige driehoeken wat betekenen de 3 cijfers?
+        else:
+            for i in range(len(orderlist)):
+                totalArea += ((orderlist[i][0] * orderlist[i][1]) / 2)
+        return totalArea
+
+    def max_length(self, orderlist):
+        maxLength = 0
         for i in range(len(orderlist)):
-            totalArea += orderlist[i][0] * orderlist[i][1]
+            maxLength += max(orderlist[i][0], orderlist[i][1])
+        return maxLength
 
-    # 0.5 * basis * hoogte --> geen rechthoekige driehoeken wat betekenen de 3 cijfers?
-    else:
-        for i in range(len(orderlist)):
-            totalArea += ((orderlist[i][0] * orderlist[i][1]) / 2)
-    return totalArea
-
-def max_length(orderlist):
-    maxLength = 0
-    for i in range(len(orderlist)):
-        maxLength += max(orderlist[i][0], orderlist[i][1])
-    return maxLength
-
-def sortshort(orderlist):
-    """Sorts an orderlist according to smallest side from larger to smaller"""
+def sort_short(orderlist):
+    """
+    Sorts an order list according to smallest side from larger to smaller
+    """
     orderedlist = []
     indexableOrders = copy.copy(orderlist)
     for i in range(len(indexableOrders)):
@@ -43,8 +46,10 @@ def sortshort(orderlist):
     return orderedlist
 
 
-def sortlong(orderlist):
-    """ Sorts an orderlistlist according to largest side from larger to smaller"""
+def sort_long(orderlist):
+    """
+    Sorts an orderlistlist according to largest side from larger to smaller
+    """
     orderedlist = []
     indexableOrders = copy.copy(orderlist)
     for i in range(len(indexableOrders)):
@@ -59,8 +64,10 @@ def sortlong(orderlist):
         del indexableOrders[index]
     return orderedlist
 
-def sortarea(orderlist):
-    """Sorts an orderlist according to area from larger to smaller"""
+def sort_area(orderlist):
+    """
+    Sorts an orderlist according to area from larger to smaller
+    """
     areas = []
     orderedlist = []
     indexableOrders = copy.copy(orderlist)
