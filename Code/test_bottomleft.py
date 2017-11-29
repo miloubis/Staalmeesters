@@ -17,10 +17,6 @@ for i in range(len(orderlist)):
     order2 = int(orderlist[i][1] / 10)
     dividedOrderlist.append([order1,order2])
 
-rollC[0:20, 0:55] = 1
-rollC[20:40, 0:20] = 2
-rollC[20:40, 30:40] = 3
-
 # search for empty space
 def bottom_left(roll):
     """ 
@@ -48,25 +44,21 @@ def bottom_left(roll):
 
 sortedlist = sortarea(dividedOrderlist)
 
-def pack(sortedlist):
+def pack(sortedlist, possibleWidth, rowpos, columnpos):
     """
     Pack the best fitting sub-order in the roll
     """
     print(sortedlist)
     for i in range(len(sortedlist)):
         if possibleWidth >= sortedlist[i][1]:
+            width = sortedlist[i][0]
+            height = sortedlist[i][1]
+            rollC[rowpos: height, columnpos: width] = i + 1
+    # return [rowpos:width, columnpos:length]
 
 
-    # if possibleWidth >= sortedlist[i]
-    # row = rowpos
-    # startingCol = columnpos
-    # for i in range(bestFit.shape[0]):
-    #     for j in range(bestFit.shape[1]):
-    #         roll[row + i][startingCol + j] = orderNum
-    # return roll
+# pack(sortedlist, possibleWidth, rowpos, columnpos)
 
-bottom_left(rollC)
-pack(sortedlist)
 np.set_printoptions(threshold=100000, linewidth=350)
 # print(rollC)
 
