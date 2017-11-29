@@ -1,21 +1,24 @@
-rollC = [[0, 0, 1, 1, 2, 2, 2, 3, 3, 3],
-		 [4, 4, 4, 5, 5, 5, 6, 6, 6, 7]]
+rollC = [[18, 0, 0, 0, 4, 0, 2, 2, 0, 0, 0, 0, 0],
+		 [0, 0, 0, 0, 4, 3, 2, 2, 1, 1, 1, 1, 1],
+		 [5, 5, 5, 5, 4, 3, 2, 2, 1, 1, 1, 1, 1]]
 
 
 def search_skyline(roll):
-	skyline = 10
-	for i in range(1,10):
-		if roll[1,i] != 0:
-			skyline -= roll[1,i]/roll[1,i]
-	print skyline
+	counter = 0
+	numrows = len(roll)
+	numcols = len(roll[0])
+	for n in range(numrows, 1):
+		for i in range(1,14):
+			if roll[n][i] == 0:
+				for j in range(i, 14):
+					if roll[n][j]!=0:
+						counter+=j
+
+	print counter
+	print numrows
+	print numcols
+	print roll[0][0]
 
 
 search_skyline(rollC)
 
-#@L14D010[C:Code]|15> python test.py
-#Traceback (most recent call last):
-#  File "test.py", line 13, in <module>
-#    search_skyline(rollC)
-#  File "test.py", line 8, in search_skyline
-#    if roll[1,i] != 0:
-#TypeError: list indices must be integers, not tuple
