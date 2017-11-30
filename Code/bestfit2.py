@@ -1,6 +1,7 @@
 from helper import *
 from load_orders import *
 import numpy as np
+import matplotlib.pylab as plt
 
 # define order, list of remaining orders and order number
 orderlist = order1.orderlist
@@ -10,14 +11,12 @@ orderNum = 0
 # create roll
 rollC = np.zeros((order1.maxLengthRoll, ROLL_C))
 
-# row = 0
-
-# place all orders, therefore looping untill remainingOrders is an empty list
+# place all orders, therefore looping until remainingOrders is an empty list
 while remainingOrders:
     j = 0
+
     # get the skyline
     skyline = Skyline(rollC)
-    # row = skyline[0]
     possibleWidth = skyline[2]
 
     # search for the best fitting sub order
@@ -40,5 +39,12 @@ while remainingOrders:
             elif remainingOrders[j][0] == bestFit.shape[1] and remainingOrders[j][1] == bestFit.shape[0]:
                 del remainingOrders[j]
                 break
-np.set_printoptions(threshold=50000, linewidth=3500)
-print(rollC)
+# calculate the cost
+cost = cost(rollC)
+print(cost)
+np.set_printoptions(threshold=np.inf, linewidth=3000)
+# print(rollC)
+# print(np.where(rollC == 6))
+
+plt.imshow(rollC)
+plt.show()

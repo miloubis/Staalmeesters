@@ -30,10 +30,11 @@ def search(possibleWidth, remainingOrders):
     bestFit = np.zeros((0, 0))
 
     # Sort method can be changed to sort_long, sort_short or sort_area.
-    sortedOrders = sort_long(remainingOrders)
+    sortedOrders = sort_short(remainingOrders)
 
     for i in range(len(sortedOrders)):
         subOrder = np.ones((sortedOrders[i][0], sortedOrders[i][1]))
+
         if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
             subOrder = rotation(subOrder)
@@ -115,6 +116,21 @@ def pack(roll, skyline, bestFit, orderNum):
         for j in range(bestFit.shape[1]):
             roll[row + i][startingCol + j] = orderNum
     return roll
+
+def cost(roll):
+    """
+
+    :param roll:
+    :return:
+    """
+    results = []
+    roll = roll[~np.all(roll == 0, axis=1)]
+    meter = roll.shape[0] / 100
+    cost = roll.shape[0] * 13.92 / 100
+    results.append(meter)
+    results.append(cost)
+    return results
+
 
 
 # MOGEN WE SORT CODE GEBRUIKEN???
