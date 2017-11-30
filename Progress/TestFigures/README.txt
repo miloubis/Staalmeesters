@@ -1,1 +1,1 @@
-This directory contains useful test figures to see wether an algorithm works and to visualize conducted experiments.
+This directory contains useful test figures to see wether an algorithm works and to visualize conducted experiments. The first bestfit visualizations do not have a clear color distinction. The yellow areas are empty spaces in the used roll, the lighter purple is used roll and the darker purple is unused. 
