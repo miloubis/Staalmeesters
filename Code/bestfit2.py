@@ -42,9 +42,6 @@ while remainingOrders:
 # calculate the cost
 cost = cost(rollC)
 print(cost)
-np.set_printoptions(threshold=np.inf, linewidth=3000)
-# print(rollC)
-# print(np.where(rollC == 6))
 
 plt.imshow(rollC)
 plt.show()
