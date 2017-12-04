@@ -28,16 +28,21 @@ The scripts necessary to run the test and to see which algorithm works the best 
 
 ## Built with
 - [Python 3](https://www.python.org/downloads/) - The programming language
+
 - [PyCharm](https://www.jetbrains.com/pycharm/) - Used to write scripts in
+
 - [Sublime](https://www.sublimetext.com/) - Used to write scripts in
 
 ## Authors
 Bastiaanse, Morena
+
 Bisseling, Milou
+
 Bouma, Leonie
 
 ## Acknowledgments
 Nicole Silverio - for providing useful feedback and ideas during tech intervision
+
 Daan van den Berg - for providing useful feedback on our presentation skills and for the helpful lectures
 
 
