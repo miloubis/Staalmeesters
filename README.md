@@ -42,7 +42,7 @@ Bisseling, Milou
 
 Bouma, Leonie
 
-## Acknowledgments
+## Acknowledgements
 Nicole Silverio - for providing useful feedback and ideas during tech intervision
 
 Daan van den Berg - for providing useful feedback on our presentation skills and for the helpful lectures
