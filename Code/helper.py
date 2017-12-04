@@ -14,6 +14,10 @@ ROLL_A = 500
 ROLL_B = 520
 ROLL_C = 550
 
+COST_A = 14.80
+COST_B = 14.24
+COST_C = 13.92
+
 def rotation(subOrder):
     rotateOrder = np.transpose(subOrder)
     return rotateOrder
@@ -61,7 +65,6 @@ def Skyline(roll):
     counter = 0
     skyline = []
     find = False
-    k = 0
 
     for i in range(roll.shape[0]):
         for j in range(roll.shape[1]):
@@ -90,6 +93,7 @@ def fill(roll, skyline):
     :param skyline: contains the values at which the skyline starts and the width of that skyline where no order fits
     :return: a filled roll
     '''
+
     row = skyline[0]
     startingCol = skyline[1]
     possibleWidth = skyline[2]
@@ -119,14 +123,15 @@ def pack(roll, skyline, bestFit, orderNum):
 
 def cost(roll):
     """
-
-    :param roll:
-    :return:
+    :param roll: the roll filled with orders
+    :return: the length of roll used and the costs of using this roll
     """
     results = []
     roll = roll[~np.all(roll == 0, axis=1)]
     meter = roll.shape[0] / 100
-    cost = roll.shape[0] * 13.92 / 100
+
+    # cost
+    cost = roll.shape[0] * COST_C / 100
     results.append(meter)
     results.append(cost)
     return results
