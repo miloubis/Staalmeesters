@@ -22,7 +22,7 @@ From anaconda you will need at least the numpy and matplotlib package.
 ## Usage
 **Directory explanation**
 
-Staalmeesters contains three main directories; Code, Literature and Progress. The usage of the directory Code will be further explained in 'running tests'. In Literature, you can find papers adressing similar problems. We have read these papers to get a better understanding of the problem at hand and to get useful ideas for algorithms. In Progress we post our notes from tech intervision and the weekly goals we set up at the beginning of the course. In Progress there is another directory named TestFigures, in TestFigures we have posted first figures with results. These are not the end visualisation. 
+Staalmeesters contains three main directories; Code, Literature and Progress. The usage of the directory Code will be further explained in 'running tests'. In Literature, you can find papers adressing similar problems. We have read these papers to get a better understanding of the problem at hand and to get useful ideas for algorithms. In Progress we post our notes from tech intervision and the weekly goals we set up at the beginning of the course. In Progress there is another directory named TestFigures, in TestFigures we have posted first figures with results. These are not the final visualisations. The final visualisations are presented in the directory Visualisations in Progress.
 
 **Running tests** 
 
