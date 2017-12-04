@@ -39,9 +39,13 @@ while remainingOrders:
             elif remainingOrders[j][0] == bestFit.shape[1] and remainingOrders[j][1] == bestFit.shape[0]:
                 del remainingOrders[j]
                 break
+
 # calculate the cost
 cost = cost(rollC)
 print(cost)
 
 plt.imshow(rollC)
 plt.show()
+
+np.set_printoptions(threshold=10000000, linewidth=4000)
+print(rollC)
