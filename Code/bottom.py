@@ -37,17 +37,11 @@ indexes = []
 # loop through orderlist and place orders in grid
 for i in range(1, len(sortedlist) + 1):
     roll[rowpos:rowpos + sortedlist[i - 1][0], columnpos:sortedlist[i - 1][1]] = i
-    # indexes.append(rowpos)
-    # indexes.append(rowpos + sortedlist[i - 1][0])
-    # indexes.append(columnpos)
-    # indexes.append(sortedlist[i - 1][1])
     print(sortedlist[i-1][1])
     indexes.append([columnpos, rowpos, sortedlist[i - 1][1], sortedlist[i - 1][0]])
     rowpos += sortedlist[i - 1][0]
 
-# print roll
-print(roll)
-
+# set axes
 fig = plt.figure()
 ax= fig.add_subplot(111, aspect='equal')
 ax.set_xlim(0, 55)
@@ -77,7 +71,7 @@ for i in indexes:
 plt.show()
 
 
-
+# Practising
 # ax.add_patch(
 #     patches.Rectangle(
 #         (0, 0),
