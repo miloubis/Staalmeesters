@@ -40,25 +40,36 @@ def bottom_left(roll):
         if roll[rowpos][j] != 0 or j == widthRoll-columnpos:
             possibleWidth = j-columnpos
             break
-    return possibleWidth, rowpos, columnpos
+    zeropos = []
+    zeropos.append(possibleWidth)
+    zeropos.append(rowpos)
+    zeropos.append(columnpos)
+    return zeropos
 
-sortedlist = sortarea(dividedOrderlist)
+sortedlist = sort_area(dividedOrderlist)
 
-def pack(sortedlist, possibleWidth, rowpos, columnpos):
+def pack(sortedlist, zeropos):
     """
-    Pack the best fitting sub-order in the roll
+    Pack sub-order in the roll
     """
-    print(sortedlist)
-    for i in range(len(sortedlist)):
-        if possibleWidth >= sortedlist[i][1]:
-            width = sortedlist[i][0]
-            height = sortedlist[i][1]
-            rollC[rowpos: height, columnpos: width] = i + 1
+    possibleWidth = zeropos[0]
+    rowpos = zeropos[1]
+    columnpos = zeropos[2]
+    print(zeropos)
+    width = sortedlist[i][0]
+    height = sortedlist[i][1]
+    rollC[rowpos: height, columnpos: width] = 1
+    # for i in range(len(sortedlist)):
+    #     if possibleWidth >= sortedlist[i][1]:
+    #         width = sortedlist[i][0]
+    #         height = sortedlist[i][1]
+    #         rollC[rowpos: height, columnpos: width] = i + 1
+
     # return [rowpos:width, columnpos:length]
 
-bottom_left(rollC)
-pack(sortedlist, possibleWidth, rowpos, columnpos)
+# bottom_left(rollC)
+pack(sortedlist, bottom_left(rollC))
 
 np.set_printoptions(threshold=100000, linewidth=350)
-# print(rollC)
+print(rollC)
 
