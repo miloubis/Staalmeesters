@@ -18,11 +18,76 @@ COST_A = 14.80
 COST_B = 14.24
 COST_C = 13.92
 
+def sort_short(orderlist):
+    """
+
+    :param orderlist:
+    :return:
+    """
+    orderedlist = []
+    indexableOrders = copy.copy(orderlist)
+    for i in range(len(indexableOrders)):
+        if indexableOrders[i][0] > indexableOrders[i][1]:
+            indexableOrders[i][0], indexableOrders[i][1] = indexableOrders[i][1], indexableOrders[i][0]
+    firstelement = list(map(lambda x: x[0], indexableOrders))
+
+    for i in range(len(indexableOrders)):
+        index = firstelement.index(max(firstelement))
+        orderedlist.append(indexableOrders[index])
+        del firstelement[index]
+        del indexableOrders[index]
+    return orderedlist
+
+
+def sort_long(orderlist):
+    """
+
+    :param orderlist:
+    :return:
+    """
+    orderedlist = []
+    indexableOrders = copy.copy(orderlist)
+    for i in range(len(indexableOrders)):
+        if indexableOrders[i][0] < indexableOrders[i][1]:
+            indexableOrders[i][0], indexableOrders[i][1] = indexableOrders[i][1], indexableOrders[i][0]
+    firstelement = list(map(lambda x: x[0], indexableOrders))
+
+    for i in range(len(indexableOrders)):
+        index = firstelement.index(max(firstelement))
+        orderedlist.append(indexableOrders[index])
+        del firstelement[index]
+        del indexableOrders[index]
+    return orderedlist
+
+def sort_area(orderlist):
+    """
+
+    :param orderlist:
+    :return:
+    """
+    areas = []
+    orderedlist = []
+    indexableOrders = copy.copy(orderlist)
+    for i in range(len(indexableOrders)):
+        areas.append(indexableOrders[i][0]*indexableOrders[i][1])
+    for i in range(len(indexableOrders)):
+        index = areas.index(max(areas))
+        orderedlist.append(indexableOrders[index])
+        del areas[index]
+        del indexableOrders[index]
+    return orderedlist
+
 def rotation(subOrder):
     rotateOrder = np.transpose(subOrder)
     return rotateOrder
 
 def search(possibleWidth, remainingOrders):
+    """
+
+    :param possibleWidth:
+    :param remainingOrders:
+    :return:
+    """
     """ This is the search funtion for the best fitting sub order in an (remaining) order list. It searches in a
     sorted list of lists which is either sorted based on the long side, short side or acreage. It returns a best
     fitting sub order when 1) the order has the maximum possible with. For example possible width is 5 and the
@@ -56,6 +121,11 @@ def search(possibleWidth, remainingOrders):
     return bestFit
 
 def Skyline(roll):
+    """
+
+    :param roll:
+    :return:
+    """
     """
     Find the lowest skyline. The row in which this skyline is located, the column at which the skyline starts
     and how many columns the skyline covers.
@@ -127,16 +197,33 @@ def cost(roll):
     :return: the length of roll used and the costs of using this roll
     """
     results = []
+
+    # Strip the roll of rows with only zeros
     roll = roll[~np.all(roll == 0, axis=1)]
+
+    # Calculate the length of roll that is used
     meter = roll.shape[0] / 100
 
-    # cost
-    cost = roll.shape[0] * COST_C / 100
-    results.append(meter)
-    results.append(cost)
-    return results
+    # Calculate the cost of using roll A
+    if roll.shape[1] == 500 or roll.shape[1] == 50:
+        costs = meter * COST_A
+        results.append(meter)
+        results.append(costs)
+        return results
 
+    # Calculate the cost of using roll B
+    if roll.shape[1] == 520 or roll.shape[1] == 52:
+        costs = meter * COST_B
+        results.append(meter)
+        results.append(costs)
+        return results
 
+    # Calculate the cost of using roll C
+    if roll.shape[1] == 550 or roll.shape[1] == 55:
+        costs = meter * COST_C
+        results.append(meter)
+        results.append(costs)
+        return results
 
 # MOGEN WE SORT CODE GEBRUIKEN???
 # def mergesort(orderlist):
