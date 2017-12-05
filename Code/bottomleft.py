@@ -17,36 +17,64 @@ for i in range(len(orderlist)):
     order2 = int(orderlist[i][1] / 10)
     dividedOrderlist.append([order1,order2])
 
+sortedlist = sort_long(dividedOrderlist)
+
 rollC[0:2,0:5] = 1
-print(rollC[0][4])
+
 
 # search for empty space
-def find_zero_indexes(roll):
+def empty_space(roll):
     """
     Find the next bottom left corner to place a suborder.
     """
-    print('ai')
-    row = 0
-    column = 0
-    possibleWidth = 0
-    columnpos = 0
-    rowpos = 0
+
     indexes = []
+    indexLength = 5
 
     for i in range(rollC.shape[0]):
         for j in range(rollC.shape[1]):
             if roll[i][j] == 0:
                 break
-        break
-    columnpos = j
-    rowpos = i
-    print(rowpos)
-    print(columnpos)
-    indexes.append([rowpos,columnpos])
+        columnpos = j
+        rowpos = i
+        indexes.append([rowpos,columnpos])
+        if columnpos == 0:
+            break
 
-    print(indexes)
+    return indexes
 
-find_zero_indexes(rollC)
+def width(indexes):
+
+    possibleWidths = []
+
+    for i in range(rollC.shape[0]):
+        if i == len(indexes):
+            break
+        counter = 0
+        for j in range(rollC.shape[1]):
+            if rollC[i][j] == 0 and j != 55:
+                counter += 1
+        possibleWidths.append(counter)
+
+    return possibleWidths
+
+
+# def pack_bottom_left(roll, ordernum, rowpos, heigth, columnpos, width):
+#
+#     roll[rowpos:heigth,columnpos,width] = ordernum
+
+
+subOrder = []
+for i in range(len(sortedlist)):
+    for j in range(len(width(empty_space(rollC)))):
+        if sortedlist[i][1] <= width(empty_space(rollC))[j]:
+            break
+        else:
+            # continue in loop --> try next empty space
+            print('ai')
+    subOrder.append([i,sortedlist[i][0],sortedlist[i][1], (empty_space(rollC))[j][0], (empty_space(rollC))[j][1]])
+    break
+print(subOrder)
 
     # for i in range(rollC.shape[1]):
     #     if roll[columnpos][i] == 0:
@@ -64,18 +92,18 @@ find_zero_indexes(rollC)
     # return zeropos
 
 sortedlist = sort_area(dividedOrderlist)
-# print(sortedlist)
 
-def pack(sortedlist, zeropos):
-    """
-    Pack sub-order in the roll
-    """
-    possibleWidth = zeropos[0]
-    rowpos = zeropos[1]
-    columnpos = zeropos[2]
-    width = sortedlist[i][0]
-    height = sortedlist[i][1]
-    rollC[rowpos: height, columnpos: width] = 1
+
+# def pack(sortedlist, zeropos):
+#     """
+#     Pack sub-order in the roll
+#     """
+    # possibleWidth = zeropos[0]
+    # rowpos = zeropos[1]
+    # columnpos = zeropos[2]
+    # width = sortedlist[i][0]
+    # height = sortedlist[i][1]
+    # rollC[rowpos: height, columnpos: width] = 1
     # for i in range(len(sortedlist)):
     #     if possibleWidth >= sortedlist[i][1]:
     #         width = sortedlist[i][0]
