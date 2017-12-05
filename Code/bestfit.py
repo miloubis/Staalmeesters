@@ -2,6 +2,7 @@ from helper import *
 from load_orders import *
 import numpy as np
 import matplotlib.pylab as plt
+import matplotlib.colors as colors
 
 # define order, list of remaining orders and order number
 orderlist = order1.orderlist
@@ -46,6 +47,3 @@ print(cost)
 
 plt.imshow(rollC)
 plt.show()
-
-np.set_printoptions(threshold=10000000, linewidth=4000)
-print(rollC)
