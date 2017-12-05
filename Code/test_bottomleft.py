@@ -1,5 +1,6 @@
 from helper import *
 from load_orders import *
+from classes import *
 import numpy as np
 
 # load orderlist
@@ -17,59 +18,29 @@ for i in range(len(orderlist)):
     order2 = int(orderlist[i][1] / 10)
     dividedOrderlist.append([order1,order2])
 
-# search for empty space
-def bottom_left(roll):
-    """ 
-    Find the next bottom left corner to place a suborder. 
-
-    """
-
-    row = 0
-    column = 0
-    possibleWidth = 0
-    find = False
-    columnpos = 0
-    rowpos = 0
-
-    for i in range(widthRoll):
-        if roll[columnpos][i] == 0:
-            break
-        columnpos += 1
-        rowpos = i+1
-    for j in range(columnpos, widthRoll):
-        if roll[rowpos][j] != 0 or j == widthRoll-columnpos:
-            possibleWidth = j-columnpos
-            break
-    zeropos = []
-    zeropos.append(possibleWidth)
-    zeropos.append(rowpos)
-    zeropos.append(columnpos)
-    return zeropos
-
+# sort orderlist
 sortedlist = sort_area(dividedOrderlist)
 
-def pack(sortedlist, zeropos):
+def pack_bottom_left(m,sortedlist,zeropos):
     """
     Pack sub-order in the roll
     """
-    possibleWidth = zeropos[0]
-    rowpos = zeropos[1]
-    columnpos = zeropos[2]
-    print(zeropos)
-    width = sortedlist[i][0]
-    height = sortedlist[i][1]
-    rollC[rowpos: height, columnpos: width] = 1
-    # for i in range(len(sortedlist)):
-    #     if possibleWidth >= sortedlist[i][1]:
-    #         width = sortedlist[i][0]
-    #         height = sortedlist[i][1]
-    #         rollC[rowpos: height, columnpos: width] = i + 1
+    rowpos = zeropos[0]
+    columnpos = zeropos[1]
+    possibleWidth = zeropos[2]
 
-    # return [rowpos:width, columnpos:length]
+    if possibleWidth >= sortedlist[1]:
+        width = sortedlist[0]
+        height = sortedlist[1]
+        rollC[rowpos: height, columnpos: width] = m + 1
 
-# bottom_left(rollC)
-pack(sortedlist, bottom_left(rollC))
+
+for i in range(len(orderlist)):
+    startposition = Skyline(rollC)
+    print(startposition)
+    pack_bottom_left(i,sortedlist[i],Skyline(rollC))
+    print(Skyline(rollC))
 
 np.set_printoptions(threshold=100000, linewidth=350)
-print(rollC)
+print(rollC.shape[1])
 
