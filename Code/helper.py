@@ -100,20 +100,20 @@ def search(possibleWidth, remainingOrders):
     bestFit = np.zeros((0, 0))
 
     # Sort method can be changed to sort_long, sort_short or sort_area.
-    sortedOrders = sort_short(remainingOrders)
+    sortedOrders = remainingOrders
 
     for i in range(len(sortedOrders)):
         subOrder = np.ones((sortedOrders[i][0], sortedOrders[i][1]))
 
         if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
-        #     subOrder = rotation(subOrder)
-        #     if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-        #         bestFit = subOrder
-        # else:
-        #     subOrder = rotation(subOrder)
-        #     if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-        #         bestFit = subOrder
+            subOrder = rotation(subOrder)
+            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+                bestFit = subOrder
+        else:
+            subOrder = rotation(subOrder)
+            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+                bestFit = subOrder
 
         # If maximum width of array is reached break loop and return bestFit
         if bestFit.shape[1] == possibleWidth:
