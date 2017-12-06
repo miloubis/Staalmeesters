@@ -44,8 +44,6 @@ def width(indexes):
 
     possibleWidths = []
 
-    print(indexes)
-
     for i in range(rollC.shape[0]):
         if i == len(indexes):
             break
@@ -59,12 +57,13 @@ def width(indexes):
 
     return possibleWidths
 
+rollC[0:34,0:18] = 1
+rollC[0:33,18:32] = 2
+rollC[0:32,32:42] = 3
+rollC[32:32,32:] = 4
 
-rollC[0:2,0:13] = 1
-rollC[0:2,18:30] = 2
+print(sortedlist)
 
-# print(empty_space(rollC))
-print(width(empty_space(rollC)))
 
 
 # def pack_bottom_left(roll, ordernum, rowpos, heigth, columnpos, width):
