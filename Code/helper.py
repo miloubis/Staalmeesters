@@ -8,6 +8,7 @@ includes every function necessary for a certain algorithm.
 """
 import numpy as np
 from classes import *
+import math
 
 # Define constants
 ROLL_A = 500
@@ -106,13 +107,13 @@ def search(possibleWidth, remainingOrders):
 
         if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
-            subOrder = rotation(subOrder)
-            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-                bestFit = subOrder
-        else:
-            subOrder = rotation(subOrder)
-            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-                bestFit = subOrder
+        #     subOrder = rotation(subOrder)
+        #     if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+        #         bestFit = subOrder
+        # else:
+        #     subOrder = rotation(subOrder)
+        #     if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+        #         bestFit = subOrder
 
         # If maximum width of array is reached break loop and return bestFit
         if bestFit.shape[1] == possibleWidth:
@@ -167,7 +168,7 @@ def fill(roll, skyline):
     row = skyline[0]
     startingCol = skyline[1]
     possibleWidth = skyline[2]
-    filler = 999
+    filler = 9999
     for i in range(roll.shape[0]):
         if roll[row + i][startingCol - 1] == 0:
             break
@@ -188,7 +189,7 @@ def pack(roll, skyline, bestFit, orderNum):
     startingCol = skyline[1]
     for i in range(bestFit.shape[0]):
         for j in range(bestFit.shape[1]):
-            roll[row + i][startingCol + j] = orderNum
+            roll[row + i][startingCol + j] = (orderNum * 100)
     return roll
 
 def cost(roll):
