@@ -37,7 +37,6 @@ indexes = []
 # loop through orderlist and place orders in grid
 for i in range(1, len(sortedlist) + 1):
     roll[rowpos:rowpos + sortedlist[i - 1][0], columnpos:sortedlist[i - 1][1]] = i
-    print(sortedlist[i-1][1])
     indexes.append([columnpos, rowpos, sortedlist[i - 1][1], sortedlist[i - 1][0]])
     rowpos += sortedlist[i - 1][0]
 
