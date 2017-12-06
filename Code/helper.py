@@ -107,13 +107,13 @@ def search(possibleWidth, remainingOrders):
 
         if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
-            subOrder = rotation(subOrder)
-            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-                bestFit = subOrder
-        else:
-            subOrder = rotation(subOrder)
-            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-                bestFit = subOrder
+        #     subOrder = rotation(subOrder)
+        #     if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+        #         bestFit = subOrder
+        # else:
+        #     subOrder = rotation(subOrder)
+        #     if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+        #         bestFit = subOrder
 
         # If maximum width of array is reached break loop and return bestFit
         if bestFit.shape[1] == possibleWidth:
