@@ -21,7 +21,8 @@ for i in range(len(orderlist)):
     dividedOrderlist.append([order1,order2])
 
 # fill in sort method
-sortedlist = sort_short(dividedOrderlist)
+sortedlist = dividedOrderlist
+print(sortedlist)
 
 # print grid of zeros and set printoptions
 roll = np.zeros((480,55))
@@ -68,6 +69,8 @@ for i in indexes:
     )
 
 plt.show()
+
+print(rowpos)
 
 
 # Practising
