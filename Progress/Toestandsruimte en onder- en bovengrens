@@ -1,3 +1,11 @@
 Ondergens
+  De ondergrens voor een order van deze case is gelijk aan de som van de oppervlakten van alle suborders van deze order. Dit is namelijk
+  het minimaal benodigde oppervlak aan staal.
+  
 Bovengrens
+  De bovengrens voor een order van deze case is gelijk aan de som van de lange kanten van alle suborders van deze order. Dit is namelijk 
+  het maximaal benodigde oppervlak aan staal.
+
 Toestandsruimte
+  De bovengrens van de toestandsruimte voor een order van deze case is gelijk aan het aantal verschillende mogelijkheden waarop de 
+  suborders in de rol staal kunnen worden geplaatst. 
