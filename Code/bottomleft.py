@@ -23,9 +23,6 @@ we opslaan """
 # NOTITIE LEO: hier is nu een functie voor :)
 sortedlist = sort_long(dividedOrderlist)
 
-rollC[0:2,0:5] = 1
-
-
 # search for empty space
 def empty_space(roll):
     """
@@ -55,69 +52,60 @@ def width(indexes):
         if i == len(indexes):
             break
         counter = 0
-        for j in range(rollC.shape[1]):
-            if rollC[i][j] == 0 and j != 55:
+        for j in range(indexes[i][1],rollC.shape[1]):
+            if rollC[i][j] != 0:
+                break
+            elif rollC[i][j] == 0 and j != 55:
                 counter += 1
         possibleWidths.append(counter)
-
+    # print(possibleWidths)
     return possibleWidths
+
+rollC[0:34,0:18] = 1
+rollC[0:33,18:32] = 2
+rollC[0:32,32:42] = 3
+rollC[34:64,0:19] = 4
+
+
+# print(sortedlist)
+# empty_space(rollC)
+# width(empty_space(rollC))
 
 
 # def pack_bottom_left(roll, ordernum, rowpos, heigth, columnpos, width):
-#
 #     roll[rowpos:heigth,columnpos,width] = ordernum
 
+count = 0
+while sortedlist:
+    position = empty_space(rollC)
 
-subOrder = []
-for i in range(len(sortedlist)):
-    for j in range(len(width(empty_space(rollC)))):
-        if sortedlist[i][1] <= width(empty_space(rollC))[j]:
-            break
-        else:
-            # continue in loop --> try next empty space
-            print('ai')
-    subOrder.append([i,sortedlist[i][0],sortedlist[i][1], (empty_space(rollC))[j][0], (empty_space(rollC))[j][1]])
-    break
-print(subOrder)
-
-    # for i in range(rollC.shape[1]):
-    #     if roll[columnpos][i] == 0:
-    #         break
-    #     columnpos += 1
-    #     rowpos = i+1
-    # for j in range(columnpos, rollC.shape[1]):
-    #     if roll[rowpos][j] != 0 or j == rollC.shape[1] - columnpos:
-    #         possibleWidth = j - columnpos
-    #         break
-    # zeropos = []
-    # zeropos.append(possibleWidth)
-    # zeropos.append(rowpos)
-    # zeropos.append(columnpos)
-    # return zeropos
-
-sortedlist = sort_area(dividedOrderlist)
+    possibleWidth = width(empty_space(rollC))
 
 
-# def pack(sortedlist, zeropos):
-#     """
-#     Pack sub-order in the roll
-#     """
-    # possibleWidth = zeropos[0]
-    # rowpos = zeropos[1]
-    # columnpos = zeropos[2]
-    # width = sortedlist[i][0]
-    # height = sortedlist[i][1]
-    # rollC[rowpos: height, columnpos: width] = 1
-    # for i in range(len(sortedlist)):
-    #     if possibleWidth >= sortedlist[i][1]:
-    #         width = sortedlist[i][0]
-    #         height = sortedlist[i][1]
-    #         rollC[rowpos: height, columnpos: width] = i + 1
 
-    # return [rowpos:width, columnpos:length]
+    count +=1
+    if count == 22:
+        break
 
-# bottom_left(rollC)
-# pack(sortedlist, bottom_left(rollC))
+
+# remainingOrders = sortedlist
+# subOrder = []
+# for i in range(len(sortedlist)):
+#     possibleWidth = width(empty_space(rollC))[0]
+#     if remainingOrders[i][1] <= possibleWidth:
+#         subOrder.append([i, remainingOrders[i][0], remainingOrders[i][1], (empty_space(rollC))[0][0], (empty_space(rollC))[0][1]])
+#         rollC[subOrder[i][3]:subOrder[i][1], subOrder[i][4]:subOrder[i][2]] = subOrder[i][0] + 1
+#     elif remainingOrders[i][1] >= possibleWidth:
+#         # try next zero position
+#         nextzero = empty_space(rollC)[1]
+#         nextwidth = width(empty_space(rollC))[1]
+#         if remainingOrders[i][1] >= nextwidth:
+#             subOrder.append([i, remainingOrders[i][0], remainingOrders[i][1], (empty_space(rollC))[1][0], (empty_space(rollC))[1][1]])
+#             rollC[subOrder[i][3]:subOrder[i][1], subOrder[i][4]:subOrder[i][2]] = subOrder[i][0] + 1
+
+#
+# print(subOrder)
+
 
 np.set_printoptions(threshold=100000, linewidth=350)
 print(rollC)
