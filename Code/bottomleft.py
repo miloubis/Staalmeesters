@@ -6,17 +6,21 @@ import numpy as np
 orderlist = order1.orderlist
 
 # create grid for steel roll
-maxLengthRoll = int(order1.maxLengthRoll/10)
-widthRoll = int(ROLL_C/10)
-rollC = np.zeros((maxLengthRoll,widthRoll))
+maxLength = order1.maxLengthRoll
+rollC = np.zeros((maxLength, ROLL_C))
+
+"""NOTITIE LEO: volgens mij is de divide functie dus niet meer nodig omdat we het beste in centimeters kunnen
+werken nu we de roll niet meer hoeven te printen en de visualisatie nu gewoon werkt. Dit scheelt in de informatie die
+we opslaan """
 
 # divide orderlist by 10
-dividedOrderlist = []
-for i in range(len(orderlist)):
-    order1 = int(orderlist[i][0] / 10)
-    order2 = int(orderlist[i][1] / 10)
-    dividedOrderlist.append([order1,order2])
+# dividedOrderlist = []
+# for i in range(len(orderlist)):
+#     order1 = int(orderlist[i][0] / 10)
+#     order2 = int(orderlist[i][1] / 10)
+#     dividedOrderlist.append([order1,order2])
 
+# NOTITIE LEO: hier is nu een functie voor :)
 sortedlist = sort_long(dividedOrderlist)
 
 rollC[0:2,0:5] = 1

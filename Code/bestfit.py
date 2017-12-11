@@ -1,8 +1,7 @@
 from helper import *
 from load_orders import *
 import numpy as np
-import matplotlib.pylab as plt
-import matplotlib.colors as colors
+
 
 # define order, list of remaining orders and order number
 orderlist = order1.orderlist
@@ -10,7 +9,8 @@ remainingOrders = orderlist
 orderNum = 0
 
 # create roll
-rollC = np.zeros((order1.maxLengthRoll, ROLL_C))
+maxLength = order1.maxLengthRoll
+rollC = create_roll(maxLength, ROLL_C)
 
 # place all orders, therefore looping until remainingOrders is an empty list
 while remainingOrders:
@@ -43,7 +43,5 @@ while remainingOrders:
 
 # calculate the cost
 cost = cost(rollC)
-print(cost)
+visualisation(rollC)
 
-plt.imshow(rollC)
-plt.show()

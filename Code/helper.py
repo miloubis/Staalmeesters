@@ -9,6 +9,7 @@ includes every function necessary for a certain algorithm.
 import numpy as np
 from classes import *
 import math
+import matplotlib.pylab as plt
 
 # Define constants
 ROLL_A = 500
@@ -21,10 +22,12 @@ COST_C = 13.92
 
 def sort_short(orderlist):
     """
-
-    :param orderlist:
-    :return:
+    Sort a list of orders from largest short side to smallest. Example: To make sure [4,7] comes before [4,6] in the
+    sorted list, the orderlist is first sorted on surface area.
+    :param orderlist: list of (remaining) orders that need to be sorted
+    :return: list of sorted orders
     """
+    orderlist = sort_area(orderlist)
     orderedlist = []
     indexableOrders = copy.copy(orderlist)
     for i in range(len(indexableOrders)):
@@ -42,10 +45,12 @@ def sort_short(orderlist):
 
 def sort_long(orderlist):
     """
-
-    :param orderlist:
-    :return:
+    Sort a list of orders from largest long side to smallest. Example: To make sure [4,3] comes before [4,2] in the
+    sorted list, the orderlist is first sorted on surface area.
+    :param orderlist: list of (remaining) orders that need to be sorted
+    :return: list of sorted orders
     """
+    orderlist = sort_area(orderlist)
     orderedlist = []
     indexableOrders = copy.copy(orderlist)
     for i in range(len(indexableOrders)):
@@ -62,9 +67,9 @@ def sort_long(orderlist):
 
 def sort_area(orderlist):
     """
-
-    :param orderlist:
-    :return:
+    Sort a list of orders from largest surface area to smallest.
+    :param orderlist: list of (remaining) orders that need to be sorted
+    :return: list of sorted orders
     """
     areas = []
     orderedlist = []
@@ -78,42 +83,56 @@ def sort_area(orderlist):
         del indexableOrders[index]
     return orderedlist
 
+def sorted_orders(orderlist):
+    """
+    Sort a list of orders in three ways: long or sort side or area. If you'd like to change the manner of sorting you
+    only need to change this function.
+    :param orderlist: list of (remaining) orders that need to be sorted
+    :return: list of sorted orders
+    """
+    # use either sort_long, sort_short or sort_area
+    sortedOrders = sort_area(orderlist)
+    return sortedOrders
+
 def rotation(subOrder):
     rotateOrder = np.transpose(subOrder)
     return rotateOrder
 
+def create_roll(maxLength, type):
+    """
+    Create a numpy array (roll) in which all sub orders from an order must be placed.
+    :param maxLength: the maximum length needed to fit all sub orders into the array.
+    :param type: type of steel roll.
+    :return: numpy array that is the roll in which all sub order must be placed.
+    """
+    roll = np.zeros((maxLength, type))
+    return roll
+
 def search(possibleWidth, remainingOrders):
     """
-
-    :param possibleWidth:
-    :param remainingOrders:
-    :return:
+    Searches for the best fitting sub order that fits into the the width of the lowest skyline.
+    :param possibleWidth: the possible width of the lowest skyline that was calculated with the skyline function
+    :param remainingOrders: a list of remaining sub orders that need to be placed.
+    :return: numpy array of the best fitting sub order
     """
-    """ This is the search funtion for the best fitting sub order in an (remaining) order list. It searches in a
-    sorted list of lists which is either sorted based on the long side, short side or acreage. It returns a best
-    fitting sub order when 1) the order has the maximum possible with. For example possible width is 5 and the
-    best fit numpy array has 5 columns. Or 2) when each possibility is tried and the resulting best fitting order
-    has an as close as possible width (columns) to the possible width. For example, possible width is 5 and the
-    remaining orders have a width of 1, 2 , 3, 4 than 4 is the clostest width to the possible width. """
-
     # initiate bestFit array
     bestFit = np.zeros((0, 0))
 
     # Sort method can be changed to sort_long, sort_short or sort_area.
-    sortedOrders = remainingOrders
+    sortedOrders = sorted_orders(remainingOrders)
 
     for i in range(len(sortedOrders)):
         subOrder = np.ones((sortedOrders[i][0], sortedOrders[i][1]))
 
         if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
-        #     subOrder = rotation(subOrder)
-        #     if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-        #         bestFit = subOrder
-        # else:
-        #     subOrder = rotation(subOrder)
-        #     if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-        #         bestFit = subOrder
+            subOrder = rotation(subOrder)
+            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+                bestFit = subOrder
+        else:
+            subOrder = rotation(subOrder)
+            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+                bestFit = subOrder
 
         # If maximum width of array is reached break loop and return bestFit
         if bestFit.shape[1] == possibleWidth:
@@ -123,13 +142,11 @@ def search(possibleWidth, remainingOrders):
 
 def Skyline(roll):
     """
-
-    :param roll:
-    :return:
-    """
-    """
     Find the lowest skyline. The row in which this skyline is located, the column at which the skyline starts
     and how many columns the skyline covers.
+    :param roll: numpy array in which the orders are placed
+    :return: the skyline. A list with row position and column position where the skyline starts and the width of said
+    skyline.
     """
     row = 0
     startingCol = 0
@@ -159,10 +176,10 @@ def Skyline(roll):
 
 def fill(roll, skyline):
     '''
-    Where the roll has zero's in which no sub order fits. We will fill that space with 999
-    :param roll: the roll in which the orders are placed
+    Where the roll has zero's in which no sub order fits. We will fill that space with 9999
+    :param roll: numpy array in which the orders are placed
     :param skyline: contains the values at which the skyline starts and the width of that skyline where no order fits
-    :return: a filled roll
+    :return: numpy array with filling in the skyline where no sub order fits.
     '''
 
     row = skyline[0]
@@ -172,30 +189,45 @@ def fill(roll, skyline):
     for i in range(roll.shape[0]):
         if roll[row + i][startingCol - 1] == 0:
             break
+        try:
+            if roll[row + 1][startingCol + possibleWidth + 1] == 0:
+                print("getting here")
+                break
+        except IndexError:
+            print('excepting error')
+            pass
         for j in range(possibleWidth):
             roll[row + i][startingCol + j] = filler
     return roll
 
 def pack(roll, skyline, bestFit, orderNum):
     """
-    Pack the best fitting sub order into the roll
-    :param roll: the roll in which is order must be placed
+    Pack the best fitting sub order into the roll.
+    :param roll: numpy array in which is order must be placed
     :param skyline: a list of values indicating the starting row and column at which the order must be placed.
-    :param bestFit: an numpy array of the best fitting order
+    :param bestFit: numpy array of the best fitting order
     :param orderNum: the number of the order being placed
-    :return:
+    :return: roll with added order.
     """
     row = skyline[0]
     startingCol = skyline[1]
-    for i in range(bestFit.shape[0]):
-        for j in range(bestFit.shape[1]):
-            roll[row + i][startingCol + j] = (orderNum * 100)
+    if roll[row][startingCol - 1] > 0 and roll[row][startingCol - 1] != 9999:
+        print(orderNum)
+        for i in range(bestFit.shape[0]):
+            for j in range(bestFit.shape[1]):
+                roll[row + i][startingCol + j] = (orderNum * 100)
+    else:
+        for i in range(bestFit.shape[0]):
+            for j in range(bestFit.shape[1]):
+                roll[row + i][startingCol + j] = (orderNum * 100)
     return roll
 
 def cost(roll):
     """
-    :param roll: the roll filled with orders
-    :return: the length of roll used and the costs of using this roll
+    score function. This function calculates how many meters of the roll is used for all the orders that are placced
+    within the roll. And how much this x amount of meters roll costs.
+    :param roll: numpty array in which the orders are placed
+    :return: in meters, the length of roll that is used. And the costs of using this x amount of roll.
     """
     results = []
 
@@ -206,57 +238,35 @@ def cost(roll):
     meter = roll.shape[0] / 100
 
     # Calculate the cost of using roll A
-    if roll.shape[1] == 500 or roll.shape[1] == 50:
+    if roll.shape[1] == 500:
         costs = meter * COST_A
         results.append(meter)
         results.append(costs)
         return results
 
     # Calculate the cost of using roll B
-    if roll.shape[1] == 520 or roll.shape[1] == 52:
+    if roll.shape[1] == 520:
         costs = meter * COST_B
         results.append(meter)
         results.append(costs)
         return results
 
     # Calculate the cost of using roll C
-    if roll.shape[1] == 550 or roll.shape[1] == 55:
+    if roll.shape[1] == 550:
         costs = meter * COST_C
         results.append(meter)
         results.append(costs)
         return results
 
-# MOGEN WE SORT CODE GEBRUIKEN???
-# def mergesort(orderlist):
-#     """based on https://github.com/TheAlgorithms/Python/blob/master/sorts/merge_sort.py
-#     but tweaked to suit this project"""
-#     length = len(orderlist)
-#     if length > 1:
-#         midpoint = length // 2
-#         left_half = mergesort(orderlist[:midpoint])
-#         right_half = mergesort(orderlist[midpoint:])
-#         i = 0
-#         j = 0
-#         k = 0
-#         left_length = len(left_half)
-#         right_length = len(right_half)
-#         while i < left_length and j < right_length:
-#             if left_half[i] < right_half[j]:
-#                 orderlist[k] = left_half[i]
-#                 i += 1
-#             else:
-#                 orderlist[k] = right_half[j]
-#                 j += 1
-#             k += 1
-#
-#         while i < left_length:
-#             orderlist[k] = left_half[i]
-#             i += 1
-#             k += 1
-#
-#         while j < right_length:
-#             orderlist[k] = right_half[j]
-#             j += 1
-#             k += 1
-#
-#    return orderlist
+def visualisation(roll):
+    """
+    Visualize how the sub orders are placed in the roll that is used.
+    :param roll: numpy array in which the orders are placed
+    """
+    roll = roll[~np.all(roll == 0, axis=1)]
+    for i in range(roll.shape[0]):
+        for j in range(roll.shape[1]):
+            if roll[i][j] == 9999 or roll[i][j] == 0:
+                roll[i][j] = "NaN"
+    plt.imshow(roll, cmap='gist_ncar')
+    plt.show()
