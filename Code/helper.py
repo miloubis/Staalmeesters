@@ -189,15 +189,21 @@ def fill(roll, skyline):
     for i in range(roll.shape[0]):
         if roll[row + i][startingCol - 1] == 0:
             break
-        try:
-            if roll[row + 1][startingCol + possibleWidth + 1] == 0:
-                print("getting here")
-                break
-        except IndexError:
-            print('excepting error')
-            pass
         for j in range(possibleWidth):
             roll[row + i][startingCol + j] = filler
+
+    # for i in range(roll.shape[0]):
+    #     if roll[row + i][startingCol - 1] == 0:
+    #         break
+    #     try:
+    #         if roll[row + i][startingCol + possibleWidth] == 0:
+    #             raise StopIteration
+    #     except IndexError:
+    #         for j in range(possibleWidth):
+    #             roll[row + i][startingCol + j] = filler
+    #         continue
+    #     except StopIteration:
+    #         break
     return roll
 
 def pack(roll, skyline, bestFit, orderNum):
@@ -211,20 +217,20 @@ def pack(roll, skyline, bestFit, orderNum):
     """
     row = skyline[0]
     startingCol = skyline[1]
-    if roll[row][startingCol - 1] > 0 and roll[row][startingCol - 1] != 9999:
+    if 0 < roll[row][startingCol - 1] < orderNum:
         print(orderNum)
         for i in range(bestFit.shape[0]):
             for j in range(bestFit.shape[1]):
-                roll[row + i][startingCol + j] = (orderNum * 100)
+                roll[row + i][startingCol + j] = orderNum
     else:
         for i in range(bestFit.shape[0]):
             for j in range(bestFit.shape[1]):
-                roll[row + i][startingCol + j] = (orderNum * 100)
+                roll[row + i][startingCol + j] = orderNum
     return roll
 
 def cost(roll):
     """
-    score function. This function calculates how many meters of the roll is used for all the orders that are placced
+    score function. This function calculates how many meters of the roll is used for all the orders that are placed
     within the roll. And how much this x amount of meters roll costs.
     :param roll: numpty array in which the orders are placed
     :return: in meters, the length of roll that is used. And the costs of using this x amount of roll.
