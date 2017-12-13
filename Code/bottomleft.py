@@ -3,9 +3,12 @@ from load_orders import *
 import numpy as np
 
 # load orderlist
+from Code.helper import visualisation
+
 orderlist = sorted_orders(order1.orderlist)
 maxLength = order1.maxLengthRoll
 rollC = np.zeros((maxLength, ROLL_C))
+
 
 
 # search for empty space
@@ -59,10 +62,11 @@ def empty_space(roll):
 #     for j in range(breedte):
 #         rollC[i][j] = 1
 
-print(orderlist)
+
 
 #
-rollC[0:10,0:30] = 1
+
+
 # print(empty_space(rollC))
 #
 # rollC[0:10,30:40] = 2
@@ -72,24 +76,38 @@ rollC[0:10,0:30] = 1
 # print(empty_space(rollC))
 #
 
+print(orderlist)
+print("------")
+remainingOrders = orderlist[0:21]
 
-remainingOrders = orderlist
-
-print(remainingOrders)
+counter = 1
 while remainingOrders:
+
+    print(remainingOrders)
 
     emptyspaces = empty_space(rollC)
     print(emptyspaces)
-    for i in range(len(emptyspaces[0])):
 
+    rowpos = 0
+    columnpos = 0
+    for i in range(len(emptyspaces)):
         if emptyspaces[i][2] >= orderlist[0][1]:
-
-            rollC[orderlist[0][0]:emptyspaces[i][0],orderlist[0][1]:emptyspaces[i][1]] = i
             break
+        else:
+            continue
+    rowpos = emptyspaces[i][0]
+    columnpos = emptyspaces[i][1]
+    print("------")
+    print(emptyspaces[i])
+    print("......")
+    print(rowpos), print(orderlist[0][0]), print(columnpos), print(orderlist[0][1])
+    print("######")
+    rollC[rowpos:orderlist[counter][0]+rowpos,columnpos:orderlist[counter][1]+columnpos] = counter + 1
 
 
+
+    counter +=1
     remainingOrders.pop(0)
-    print(remainingOrders)
 
 #
 # for i in range(len(orderlist)):
