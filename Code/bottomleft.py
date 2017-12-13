@@ -9,17 +9,6 @@ orderlist = order1.orderlist
 maxLength = order1.maxLengthRoll
 rollC = np.zeros((maxLength, ROLL_C))
 
-"""NOTITIE LEO: volgens mij is de divide functie dus niet meer nodig omdat we het beste in centimeters kunnen
-werken nu we de roll niet meer hoeven te printen en de visualisatie nu gewoon werkt. Dit scheelt in de informatie die
-we opslaan """
-
-# divide orderlist by 10
-# dividedOrderlist = []
-# for i in range(len(orderlist)):
-#     order1 = int(orderlist[i][0] / 10)
-#     order2 = int(orderlist[i][1] / 10)
-#     dividedOrderlist.append([order1,order2])
-
 # NOTITIE LEO: hier is nu een functie voor :)
 sortedlist = sort_long(dividedOrderlist)
 
@@ -41,8 +30,7 @@ def empty_space(roll):
         indexes.append([rowpos,columnpos])
         # if columnpos == 0:
         #     break
-    print(rollC.shape[0])
-    print(indexes)
+
     return indexes
 
 def width(indexes):
@@ -62,31 +50,26 @@ def width(indexes):
     #print(possibleWidths)
     return possibleWidths
 
-rollC[0:34,0:18] = 1
-rollC[0:33,18:32] = 2
-rollC[0:32,32:42] = 3
-rollC[34:64,0:19] = 4
-
 
 # print(sortedlist)
-x = empty_space(rollC)
-width(empty_space(rollC))
+# x = empty_space(rollC)
+print(width(empty_space(rollC)))
 
 
 # def pack_bottom_left(roll, ordernum, rowpos, heigth, columnpos, width):
 #     roll[rowpos:heigth,columnpos,width] = ordernum
 #
-count = 0
-while len(sortedlist) != 0:
-    position = empty_space(rollC)
-
-    possibleWidth = width(empty_space(rollC))
-
-    #pack
-
-    count +=1
-    if count == 22:
-        break
+# count = 0
+# while len(sortedlist) != 0:
+#     position = empty_space(rollC)
+#
+#     possibleWidth = width(empty_space(rollC))
+#
+#     #pack
+#
+#     count +=1
+#     if count == 22:
+#         break
 
 
 # remainingOrders = sortedlist
