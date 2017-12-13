@@ -195,11 +195,13 @@ orderlist = [
 ]
 
 order1 = Order(orderlist[1:23])
-order2 = Order(orderlist[24:42])
-order3 = Order(orderlist[43:67])
-order4 = Order(orderlist[68:88])
+order2 = orderlist[24:42]
+order3 = orderlist[43:67]
+order4 = orderlist[68:88]
+combinedOrders234 = order2 + order3 + order4
+combinedOrders234 = Order(combinedOrders234)
 order5 = Order(orderlist[89:141])
-order6 = Order(orderlist[142:185])
+# order6 = Order(orderlist[142:185])
 
 
 

@@ -91,7 +91,7 @@ def sorted_orders(orderlist):
     :return: list of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_area(orderlist)
+    sortedOrders = sort_short(orderlist)
     return sortedOrders
 
 def rotation(subOrder):
@@ -140,7 +140,7 @@ def search(possibleWidth, remainingOrders):
 
     return bestFit
 
-def Skyline(roll):
+def skyline(roll):
     """
     Find the lowest skyline. The row in which this skyline is located, the column at which the skyline starts
     and how many columns the skyline covers.
@@ -217,15 +217,53 @@ def pack(roll, skyline, bestFit, orderNum):
     """
     row = skyline[0]
     startingCol = skyline[1]
-    if 0 < roll[row][startingCol - 1] < orderNum:
-        print(orderNum)
-        for i in range(bestFit.shape[0]):
-            for j in range(bestFit.shape[1]):
-                roll[row + i][startingCol + j] = orderNum
-    else:
-        for i in range(bestFit.shape[0]):
-            for j in range(bestFit.shape[1]):
-                roll[row + i][startingCol + j] = orderNum
+    # width = skyline[2]
+    # if 0 < roll[row][startingCol - 1] < 9999:
+    #     startingCol =
+    #     for i in range(bestFit.shape[0]):
+    #         for j in range(bestFit.shape[1]):
+    #             roll[row + i][startingCol + j] = orderNum
+    # else:
+    for i in range(bestFit.shape[0]):
+        for j in range(bestFit.shape[1]):
+            roll[row + i][startingCol + j] = orderNum
+    return roll
+
+def bestfit(remainingOrders, roll):
+    """
+
+    :param remainingorders:
+    :return:
+    """
+    orderNum = 0
+    while remainingOrders:
+        # reset j for each iteration
+        j = 0
+
+        # get the skyline
+        skylineVars = skyline(roll)
+        possibleWidth = skylineVars[2]
+
+        # search for the best fitting sub order
+        bestFit = search(possibleWidth, remainingOrders)
+
+        # fill the unusable space with a filler
+        if not bestFit.size:
+            roll = fill(roll, skylineVars)
+
+        # place the best fitting order in the roll
+        elif bestFit.size:
+            orderNum += 1
+            roll = pack(roll, skylineVars, bestFit, orderNum)
+
+            # Remove the just placed order from list of remaining orders.
+            for j in range(len(remainingOrders)):
+                if remainingOrders[j][0] == bestFit.shape[0] and remainingOrders[j][1] == bestFit.shape[1]:
+                    del remainingOrders[j]
+                    break
+                elif remainingOrders[j][0] == bestFit.shape[1] and remainingOrders[j][1] == bestFit.shape[0]:
+                    del remainingOrders[j]
+                    break
     return roll
 
 def cost(roll):
