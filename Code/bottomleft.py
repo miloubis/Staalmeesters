@@ -11,11 +11,11 @@ rollC = np.zeros((maxLength, ROLL_C))
 # search for empty space
 def empty_space(roll):
     """
-    Find the next bottom left corner to place a suborder.
+    Find the next bottom left corner to place a suborder and find possible width.
     """
     i = 0
     j = 0
-    indexes = []
+    indexes = [[0,0]]
     for i in range(rollC.shape[0]):
         for j in range(rollC.shape[1]):
             if roll[i][j] == 0:
@@ -30,40 +30,28 @@ def empty_space(roll):
     for k in range(len(indexes)-1):
         a = indexes[k][1]
         b = indexes[k+1][1]
+        c = indexes[k+1][0]
         if a != b:
-            newindexes.append([b,a])
-    newindexes = newindexes[::-1]
-    newindexes.append(indexes[-1])
+            newindexes.append([c,b])
 
-
-    # print(newindexes)
-    # print(len(indexes))
-    # for k in range(len(indexes)):
-    #     if indexes[k][1] == indexes[k+1][1]:
-    #         indexes.pop(k+1)
-    #     if ka
-    # # for k in range(len(indexes)):
-    # #     if indexes[k][1] == indexes[k][1]:
-    # #         indexes.pop(k)
-    # print(indexes[0][1])
-    return newindexes
-
-def width(newindexes):
-
-    possibleWidths = []
-
-    for i in range(rollC.shape[0]):
-        if i == len(newindexes):
-            break
+    possiblewidthlist = []
+    for l in range(len(newindexes)):
         counter = 0
-        for j in range(newindexes[i][1],rollC.shape[1]):
-            if rollC[i][j] != 0:
-                break
-            elif rollC[i][j] == 0 and j != rollC.shape[0]:
+        rowpos = newindexes[l][0]
+        colpos = newindexes[l][1]
+        for m in range(newindexes[l][1], rollC.shape[1]):
+            if rollC[rowpos][m] == 0:
                 counter += 1
-        possibleWidths.append(counter)
-    return possibleWidths
+        possiblewidthlist.append(counter)
 
+    emptyspaces = []
+    for n in range(len(possiblewidthlist)):
+        emptyspaces.append([newindexes[n][0],newindexes[n][1],possiblewidthlist[n]])
+
+    if len(emptyspaces) == 0:
+        emptyspaces.append([0,0,rollC.shape[1]])
+
+    return emptyspaces
 
 # lengte = 10
 # breedte = 10
@@ -73,17 +61,59 @@ def width(newindexes):
 
 print(orderlist)
 
-
+#
 rollC[0:10,0:30] = 1
-print(empty_space(rollC))
-print(width(empty_space(rollC)))
-rollC[0:10,30:40] = 2
-print(empty_space(rollC))
-print(width(empty_space(rollC)))
-rollC[10:20,0:20] = 3
-print(empty_space(rollC))
-print(width(empty_space(rollC)))
+# print(empty_space(rollC))
+#
+# rollC[0:10,30:40] = 2
+# print(empty_space(rollC))
+#
+# rollC[10:20,0:20] = 3
+# print(empty_space(rollC))
+#
 
+
+remainingOrders = orderlist
+
+print(remainingOrders)
+while remainingOrders:
+
+    emptyspaces = empty_space(rollC)
+    print(emptyspaces)
+    for i in range(len(emptyspaces[0])):
+
+        if emptyspaces[i][2] >= orderlist[0][1]:
+
+            rollC[orderlist[0][0]:emptyspaces[i][0],orderlist[0][1]:emptyspaces[i][1]] = i
+            break
+
+
+    remainingOrders.pop(0)
+    print(remainingOrders)
+
+#
+# for i in range(len(orderlist)):
+#     emptyspaces = empty_space(rollC)
+#     print(emptyspaces)
+#     # print(len(emptyspaces))
+#     for j in range(len(emptyspaces)):
+#         print(emptyspaces[j])
+#         for k in range(len(emptyspaces[j])):
+#             # print(emptyspaces[j][k])
+#             if emptyspaces[j][2] >= orderlist[i][1]:
+#                 print("---------")
+#                 print(emptyspaces[j][0])
+#                 print(orderlist[i][0])
+#                 print(emptyspaces[j][1])
+#                 print(orderlist[i][1])
+#                 print("---------")
+#                 rollC[emptyspaces[j][0]:orderlist[i][0], emptyspaces[j][1]:orderlist[i][1]] == i
+#                 break
+            # if emptyspaces[j][2] >= orderlist[i][1]:
+            #     rollC[emptyspaces[j][0]:orderlist[i][0],emptyspaces[j][1]:orderlist[i][1]] == i
+            #     break
+            # else:
+            #     continue
 
 
 
@@ -126,46 +156,3 @@ print(width(empty_space(rollC)))
 
 visualisation(rollC)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def pack_bottom_left(roll, ordernum, rowpos, heigth, columnpos, width):
-#     roll[rowpos:heigth,columnpos,width] = ordernum
-#
-# count = 0
-# while len(sortedlist) != 0:
-#     position = empty_space(rollC)
-#
-#     possibleWidth = width(empty_space(rollC))
-#
-#     #pack
-#
-#     count +=1
-#     if count == 22:
-#         break
-
-
-# remainingOrders = sortedlist
-# subOrder = []1]
-#         nextwidth = width(empty_space(rollC))[1]
-#         if remainingOrders[i][1] >= nextwidth:
-#             subOrder.append([i, remainingOrders[i][0], remainingOrders[i][1], (empty_space(rollC))[1][0], (empty_space(rollC))[1][1]])
-#             rollC[subOrder[i][3]:subOrder[i][1], subOrder[i][4]:subOrder[i][2]] = subOrder[i][0] + 1
-
-#
-# print(subOrder)
-
-
-# np.set_printoptions(threshold=100000, linewidth=350)
-#print(rollC)
