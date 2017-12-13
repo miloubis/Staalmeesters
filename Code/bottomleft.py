@@ -39,9 +39,10 @@ def empty_space(roll):
         columnpos = j
         rowpos = i
         indexes.append([rowpos,columnpos])
-        if columnpos == 0:
-            break
-
+        # if columnpos == 0:
+        #     break
+    print(rollC.shape[0])
+    print(indexes)
     return indexes
 
 def width(indexes):
@@ -58,7 +59,7 @@ def width(indexes):
             elif rollC[i][j] == 0 and j != 55:
                 counter += 1
         possibleWidths.append(counter)
-    # print(possibleWidths)
+    #print(possibleWidths)
     return possibleWidths
 
 rollC[0:34,0:18] = 1
@@ -68,20 +69,20 @@ rollC[34:64,0:19] = 4
 
 
 # print(sortedlist)
-# empty_space(rollC)
-# width(empty_space(rollC))
+x = empty_space(rollC)
+width(empty_space(rollC))
 
 
 # def pack_bottom_left(roll, ordernum, rowpos, heigth, columnpos, width):
 #     roll[rowpos:heigth,columnpos,width] = ordernum
-
+#
 count = 0
-while sortedlist:
+while len(sortedlist) != 0:
     position = empty_space(rollC)
 
     possibleWidth = width(empty_space(rollC))
 
-
+    #pack
 
     count +=1
     if count == 22:
@@ -108,4 +109,4 @@ while sortedlist:
 
 
 np.set_printoptions(threshold=100000, linewidth=350)
-print(rollC)
+#print(rollC)
