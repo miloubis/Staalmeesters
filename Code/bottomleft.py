@@ -22,22 +22,41 @@ def empty_space(roll):
                 break
         columnpos = j
         rowpos = i
-        if columnpos == 0 or rowpos ==0:
-            indexes.append([rowpos,columnpos])
+        indexes.append([rowpos,columnpos])
         if columnpos == 0:
             break
 
-    return indexes
+    newindexes = []
+    for k in range(len(indexes)-1):
+        a = indexes[k][1]
+        b = indexes[k+1][1]
+        if a != b:
+            newindexes.append([b,a])
+    newindexes = newindexes[::-1]
+    newindexes.append(indexes[-1])
 
-def width(indexes):
+
+    # print(newindexes)
+    # print(len(indexes))
+    # for k in range(len(indexes)):
+    #     if indexes[k][1] == indexes[k+1][1]:
+    #         indexes.pop(k+1)
+    #     if ka
+    # # for k in range(len(indexes)):
+    # #     if indexes[k][1] == indexes[k][1]:
+    # #         indexes.pop(k)
+    # print(indexes[0][1])
+    return newindexes
+
+def width(newindexes):
 
     possibleWidths = []
 
     for i in range(rollC.shape[0]):
-        if i == len(indexes):
+        if i == len(newindexes):
             break
         counter = 0
-        for j in range(indexes[i][1],rollC.shape[1]):
+        for j in range(newindexes[i][1],rollC.shape[1]):
             if rollC[i][j] != 0:
                 break
             elif rollC[i][j] == 0 and j != rollC.shape[0]:
@@ -65,8 +84,6 @@ rollC[10:20,0:20] = 3
 print(empty_space(rollC))
 print(width(empty_space(rollC)))
 
-print(empty_space(rollC))
-print(width(empty_space(rollC)))
 
 
 
