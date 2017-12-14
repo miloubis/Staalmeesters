@@ -91,7 +91,7 @@ def sorted_orders(orderlist):
     :return: list of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_short(orderlist)
+    sortedOrders = sort_long(orderlist)
     return sortedOrders
 
 def rotation(subOrder):
@@ -186,11 +186,21 @@ def fill(roll, skyline):
     startingCol = skyline[1]
     possibleWidth = skyline[2]
     filler = 9999
-    for i in range(roll.shape[0]):
-        if roll[row + i][startingCol - 1] == 0:
-            break
-        for j in range(possibleWidth):
-            roll[row + i][startingCol + j] = filler
+
+    if startingCol + possibleWidth >= roll.shape[1]:
+        for i in range(roll.shape[0]):
+            if roll[row + i][startingCol - 1] == 0:
+                break
+            for j in range(possibleWidth):
+                roll[row + i][startingCol + j] = filler
+        return roll
+    else:
+        for i in range(roll.shape[0]):
+            if roll[row + i][startingCol - 1] == 0 or roll[row + i][startingCol + possibleWidth] == 0:
+                break
+            for j in range(possibleWidth):
+                roll[row + i][startingCol + j] = filler
+        return roll
 
     # for i in range(roll.shape[0]):
     #     if roll[row + i][startingCol - 1] == 0:
@@ -204,7 +214,6 @@ def fill(roll, skyline):
     #         continue
     #     except StopIteration:
     #         break
-    return roll
 
 def pack(roll, skyline, bestFit, orderNum):
     """
