@@ -4,34 +4,37 @@ import numpy as np
 import random
 
 # Define order, list of remaining orders and order number
-orderlist = order1.orderlist
+orderlist = [[100, 200], [200, 300], [100, 100]]
 
 
 # Create roll
-rollC = np.zeros((order1.maxLengthRoll, ROLL_C))
-random.shuffle(remainingOrders)
+roll = np.zeros((15000, 1000))
+
 
 # Place sub orders from an order randomly for 500 times
-def pack(remainingOrders, roll):
+def random(remainingOrders, roll):
     orderNum = 0
     row = 0
     col = 0
     for i in range(len(remainingOrders)):
-        subOrder = remainingOrders[i]
         orderNum += 1
-        for j in range(col, ROLL_C):
-            if roll[row][j] == 0:
-                col = j
-
-            else:
-                pack2(remainingOrder[j], (row + 1), orderNum, 0, roll)
+        subOrder = remainingOrders[i]
+        if subOrder[1] <= ROLL_C-col:
+            pack(remainingOrders[i], orderNum, row, col, roll)
+            col += subOrder[1]
+        else:
+            pack(remainingOrders[i], orderNum, row+1, col, roll)
 
 
     visualisation(roll)
 
 
+def pack(subOrder, orderNum, row, col, roll):
+    for l in range(subOrder[0]):
+        for m in range(subOrder[1]):
+            roll[row+l][col+m] = orderNum
 def pack2(subOrder, row, orderNum, col, roll):
-    for k in range(col, ROLL_C):
+    for k in range(col, 1000):
         if roll[row][k] != 0:
             space = k - col
             if subOrder[1] <= space:
@@ -39,25 +42,7 @@ def pack2(subOrder, row, orderNum, col, roll):
                     for m in range(subOrder[1]):
                         roll[row+l][col+m] = orderNum
             else:
-                pack2(remainingOrder[j], (row + 1), orderNum, roll)
+                pack2(remainingOrder[i], (row + 1), orderNum, roll)
 
 
-pack(orderlist, rollC)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+pack(orderlist, roll)
