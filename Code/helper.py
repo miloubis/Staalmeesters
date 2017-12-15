@@ -177,10 +177,6 @@ def fill(roll, skyline):
     :return: A numpy array with filling in the skyline where no sub order fits.
     """
 
-    # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_area(orderlist)
-    return sortedOrders
-
     row = skyline[0]
     startingCol = skyline[1]
     possibleWidth = skyline[2]
