@@ -1,63 +1,110 @@
 from helper import *
 from load_orders import *
+import random
 
-# define order, list of remaining orders and order number
-# orderlist = order1.orderlist
-# orderlist = combinedOrders234.orderlist
-orderlist = sorted_orders(combinedOrders234.orderlist)
-remainingOrdersC = orderlist[0:31]
-remainingOrdersB = orderlist[31:62]
 
-# create roll C
-maxLength = combinedOrders234.maxLengthRoll
+# # for exercise A
+#
+# # define orderlist
+# remainingOrders = sorted_orders(order1.orderlist)
+#
+# # create roll C
+# maxLength = order1.maxLengthRoll
+# rollC = create_roll(maxLength, ROLL_C)
+#
+# # place all orders in roll
+# rollC = bestfit(remainingOrders, rollC)
+#
+# # Calculate the cost
+# costC = cost(rollC)
+# print(costC)
+#
+# # visualize roll with placed orders
+# visualisation(rollC)
+
+
+# # for exercise B
+# # define order, list of remaining orders and order number
+# orderlist = sorted_orders(combinedOrders234.orderlist)
+
+# # first half of the orderlist
+# remainingOrdersB = orderlist[0:31]
+
+# # second half of the orderlist
+# remainingOrdersC = orderlist[31:62]
+#
+# # create roll C
+# maxLength = combinedOrders234.maxLengthRoll
+# rollC = create_roll(maxLength, ROLL_C)
+#
+# # create roll B
+# rollB = create_roll(maxLength,ROLL_B)
+#
+# # place all orders in assigned roll
+# rollB = bestfit(remainingOrdersB, rollB)
+# rollC = bestfit(remainingOrdersC, rollC)
+#
+# # calculate the cost
+# costB = cost(rollB)
+# costC = cost(rollC)
+# total = costB[1] + costC[1]
+# print(costB)
+# print(costC)
+# print(total)
+#
+# # visualize the rolls of steel
+# visualisation(rollB)
+# visualisation(rollC)
+
+# for exercise C
+
+# define order
+orderlist = order5.orderlist
+remainingOrdersA = []
+remainingOrdersB = []
+remainingOrdersC = []
+
+# divide the sub orders for each type of steel
+for i in range(len(orderlist)):
+    if orderlist[i][2] == 'Type I':
+        remainingOrdersC.append(orderlist[i])
+    elif orderlist[i][2] == 'Type II':
+        remainingOrdersB.append(orderlist[i])
+    elif orderlist[i][2] == 'Type III':
+        remainingOrdersA.append(orderlist[i])
+
+print(remainingOrdersA)
+# print(remainingOrdersB)
+# print(remainingOrdersB)
+# sort the order lists
+# remainingOrdersA = sorted_orders(remainingOrdersA)
+# remainingOrdersB = sorted_orders(remainingOrdersB)
+# remainingOrdersC = sorted_orders(remainingOrdersC)
+
+# create rolls of steel
+maxLength = order5.maxLengthRoll
+rollA = create_roll(maxLength, ROLL_A)
+rollB = create_roll(maxLength, ROLL_B)
 rollC = create_roll(maxLength, ROLL_C)
 
-# create roll B
-rollB = create_roll(maxLength,ROLL_B)
-
 # place all orders in assigned roll
+rollA = bestfit(remainingOrdersA, rollA)
 rollB = bestfit(remainingOrdersB, rollB)
 rollC = bestfit(remainingOrdersC, rollC)
 
-# # place all orders: looping until remainingOrders is an empty list
-# while remainingOrdersB:
-#
-#     # reset j for each iteration
-#     j = 0
-#
-#     # get the skyline
-#     skyline = skyline(rollB)
-#     possibleWidth = skyline[2]
-#
-#     # search for the best fitting sub order
-#     bestFit = search(possibleWidth, remainingOrdersB)
-#
-#     # fill the unusable space with a filler
-#     if not bestFit.size:
-#         rollB = fill(rollB, skyline)
-#
-#     # place the best fitting order in the roll
-#     elif bestFit.size:
-#         orderNum += 1
-#         rollB = pack(rollB, skyline, bestFit, orderNum)
-#
-#         # Remove the just placed order from list of remaining orders.
-#         for j in range(len(remainingOrdersB)):
-#             if remainingOrdersB[j][0] == bestFit.shape[0] and remainingOrdersB[j][1] == bestFit.shape[1]:
-#                 del remainingOrdersB[j]
-#                 break
-#             elif remainingOrdersB[j][0] == bestFit.shape[1] and remainingOrdersB[j][1] == bestFit.shape[0]:
-#                 del remainingOrdersB[j]
-#                 break
-
-
 # calculate the cost
+costA = cost(rollA)
 costB = cost(rollB)
 costC = cost(rollC)
+total = costA[1] + costB[1] + costC[1]
+print(costA)
 print(costB)
 print(costC)
+print(total)
 
 # visualize the rolls of steel
+visualisation(rollA)
 visualisation(rollB)
 visualisation(rollC)
+
 
