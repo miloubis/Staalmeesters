@@ -40,7 +40,7 @@ def pack_random(remainingOrders, orderNum, row, col, roll):
             row += 100
             pack2_random(remainingOrders[j], orderNum, row, col, roll)
             col += subOrder[1]
-            
+
     visualisation(roll)
 
 
@@ -66,8 +66,16 @@ def pack2_random(subOrder, orderNum, row, col, roll):
 
 
 # Simulate for 500 times and save the best outcome
+#costs = []
 #for i in range(500):
-#    costs = [pack_random(orderlist, orderNum, row, col, roll), ]
+#    costs.append((i, pack_random(orderlist, orderNum, row, col, roll))
+#x = np.array(costs)
+#index = np.where(x==x.min))[0]
+#minimalcosts = costs[index]
+
+
+
+
 
     
 
