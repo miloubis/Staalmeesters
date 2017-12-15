@@ -20,8 +20,9 @@ col2 = 0
 # Create roll
 roll = np.zeros((100000, 1000))
 
+
 # Place the randomly shuffled subOrders in the roll
-def pack_random(remainingOrders, orderNum, row, col, col2, roll):
+def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
     """
     Shuffle the remaining orders randomly and place them in the roll
     :param remainingOrders: a list of lists of the remaining orders and their specifications
@@ -31,7 +32,6 @@ def pack_random(remainingOrders, orderNum, row, col, col2, roll):
     :param orderNum: the number of the order being placed
     :return: visualisation of roll with placed orders using visualisation
     """
-    count = 0
 
     while remainingOrders:
         count = 0
@@ -40,31 +40,39 @@ def pack_random(remainingOrders, orderNum, row, col, col2, roll):
             if roll[row][j] == 0 and count == 0:
                 col = j
                 count = 1
-            elif j == roll.shape[1]-1 and count == 0:
+                print(col)
+            if j == roll.shape[1]-1 and count == 0:
                 row += 1
-                pack_random(remainingOrders, orderNum, row, col, col2, roll)
+                pack_random(remainingOrders, orderNum, row, row2, col, col2, roll)
             if count == 1:
                 orderNum += 1
+
                 for k in range(roll.shape[1]):
-                    if roll[row][col + k] != 0 or k == roll.shape[1] - 1:
+                    if col + k == roll.shape[1] - 1 or roll[row][col + k] != 0:
                         col2 = col + k
-                space = col2 - col
+                        break
+
+                colSpace = col2 - col + 1
                 for l in range(subOrder[0]):
                     row2 = l
                     if roll[row + l + 1][col] != 0 or roll[row + l + 1][col2] != 0:
                         break
-                space2 = row2 - row
-                if subOrder[0] <= space2 and subOrder[1] <= space:
-                    for m in range(subOrder[0]):
-                        for n in range(subOrder[1]):
-                            roll[row + m][col + n] = orderNum
-                    remainingOrders.remove(subOrder)
-                    print(remainingOrders)
+                rowSpace = row2 - row +1
+
+                if subOrder[0] <= rowSpace:
+                    if subOrder[1] <= colSpace:
+                        for m in range(subOrder[0]):
+                            for n in range(subOrder[1]):
+                                roll[row + m][col + n] = orderNum
+                        remainingOrders.remove(subOrder)
+                        print(remainingOrders)
+
     
     visualisation(roll)
+    return roll
 
-pack_random(orderlist, orderNum, row, col, col2, roll)
 
+roll = pack_random(orderlist, orderNum, row, row2, col, col2, roll)
 
 # def pack2_random(subOrder, orderNum, row, col, roll):
 #     """
