@@ -1,5 +1,6 @@
 from helper import *
 from load_orders import *
+import random
 
 
 # # for exercise A
@@ -56,7 +57,8 @@ from load_orders import *
 # visualisation(rollC)
 
 # for exercise C
-# define orde
+
+# define order
 orderlist = order5.orderlist
 remainingOrdersA = []
 remainingOrdersB = []
@@ -64,17 +66,20 @@ remainingOrdersC = []
 
 # divide the sub orders for each type of steel
 for i in range(len(orderlist)):
-    if orderlist[2] == "Type I":
+    if orderlist[i][2] == 'Type I':
         remainingOrdersC.append(orderlist[i])
-    elif orderlist[2] == "Type II":
+    elif orderlist[i][2] == 'Type II':
         remainingOrdersB.append(orderlist[i])
-    elif orderlist[2] == "Type III":
+    elif orderlist[i][2] == 'Type III':
         remainingOrdersA.append(orderlist[i])
 
+print(remainingOrdersA)
+# print(remainingOrdersB)
+# print(remainingOrdersB)
 # sort the order lists
-remainingOrdersA = sorted_orders(remainingOrdersA)
-remainingOrdersB = sorted_orders(remainingOrdersB)
-remainingOrdersC = sorted_orders(remainingOrdersC)
+# remainingOrdersA = sorted_orders(remainingOrdersA)
+# remainingOrdersB = sorted_orders(remainingOrdersB)
+# remainingOrdersC = sorted_orders(remainingOrdersC)
 
 # create rolls of steel
 maxLength = order5.maxLengthRoll
