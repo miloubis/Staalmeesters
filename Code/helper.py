@@ -109,7 +109,7 @@ def fill(roll, skyline):
     """
     This function fills the space in which no sub order fits with a filler of 9999 (arbitrary).
     :param roll: A numpy array in which the orders are placed.
-    :param skyline: Contains the coordinates at which the skyline starts and the width of the skyline.
+    :param skyline: A list that contains the coordinates at which the skyline starts and the width of the skyline.
     :return: A numpy array with filling in the skyline where no sub order fits.
     """
 
@@ -147,177 +147,242 @@ def fill(roll, skyline):
 def pack_bestfit(roll, skyline, bestFit, orderNum):
     """
     This function packs the best fitting sub order into the roll of steel for the bestfit algorithm.
-    :param roll: numpy array in which is order must be placed
-    :param skyline: a list of values indicating the starting row and column at which the order must be placed.
-    :param bestFit: numpy array of the best fitting order
-    :param orderNum: the number of the order being placed
-    :return: roll with added order.
+    :param roll: A numpy array - roll of steel - in which the sub order must be placed.
+    :param skyline: A list that contains the coordinates at which the skyline starts and the width of the skyline.
+    :param bestFit: A numpy array representing the best fitting order.
+    :param orderNum: The number of the order being placed
+    :return: A numpy array - roll of steel - in which the sub order is placed.
     """
+
+    # Starting coordinates
     row = skyline[0]
     startingCol = skyline[1]
-    # width = skyline[2]
-    # if 0 < roll[row][startingCol - 1] < 9999:
-    #     startingCol =
-    #     for i in range(bestFit.shape[0]):
-    #         for j in range(bestFit.shape[1]):
-    #             roll[row + i][startingCol + j] = orderNum
-    # else:
+
+    # Place the sub order within the given skyline
     for i in range(bestFit.shape[0]):
         for j in range(bestFit.shape[1]):
             roll[row + i][startingCol + j] = orderNum
     return roll
 
 def rotation(subOrder):
+    """
+    This function rotates a sub order with 90 degrees.
+    :param subOrder: The sub order that will be rotated.
+    :return: The sub order that is now rotated.
+    """
+
+    # Rotate order
     rotateOrder = np.transpose(subOrder)
     return rotateOrder
 
 def search(possibleWidth, remainingOrders):
     """
-    Searches for the best fitting sub order that fits into the the width of the lowest skyline.
-    :param possibleWidth: the possible width of the lowest skyline that was calculated with the skyline function
-    :param remainingOrders: a list of remaining sub orders that need to be placed.
-    :return: numpy array of the best fitting sub order
+    This function searches for the best fitting sub order that fits into the the width of the lowest skyline.
+    :param possibleWidth: The possible width of the lowest skyline; calculated with the skyline function.
+    :param remainingOrders: A list of remaining sub orders that need to be placed in the roll of steel.
+    :return: A numpy array representing the best fitting sub order.
     """
-    # initiate bestFit array
+    # Initiate bestFit array
     bestFit = np.zeros((0, 0))
 
-    # Sort method can be changed to sort_long, sort_short or sort_area.
-    sortedOrders = remainingOrders
+    # Iterate through the complete list of remaining orders searching for the best fitting sub order.
+    for i in range(len(remainingOrders)):
 
-    for i in range(len(sortedOrders)):
-        subOrder = np.ones((sortedOrders[i][0], sortedOrders[i][1]))
+        # Update the sub order that your trying to fit into the skyline
+        subOrder = np.ones((remainingOrders[i][0], remainingOrders[i][1]))
 
+        # Update bestFit if sub order fits (better) within the skyline
         if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
             bestFit = subOrder
             subOrder = rotation(subOrder)
-            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
-                bestFit = subOrder
-        else:
-            subOrder = rotation(subOrder)
+
+            # Update bestFit if the rotated version of the sub order fits better
             if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
                 bestFit = subOrder
 
-        # If maximum width of array is reached break loop and return bestFit
+        # If the sub order did not fit or did not fit better; rotate the sub order
+        else:
+            subOrder = rotation(subOrder)
+
+            # Update bestFit if sub order fits (better) within the skyline
+            if subOrder.shape[1] <= possibleWidth and subOrder.shape[1] > bestFit.shape[1]:
+                bestFit = subOrder
+
+        # If maximum width of the best fitting sub order is reached break loop and return bestFit
         if bestFit.shape[1] == possibleWidth:
             break
     return bestFit
 
 def skyline(roll):
     """
-    Find the lowest skyline. The row in which this skyline is located, the column at which the skyline starts
-    and how many columns the skyline covers.
-    :param roll: numpy array in which the orders are placed
-    :return: the skyline. A list with row position and column position where the skyline starts and the width of said
-    skyline.
+    This function searches for the lowest skyline. It remembers the starting coordinates of this skyline - row position
+    and column position - and the width of the skyline; how many columns the skyline covers.
+    :param roll: A numpy array representing the roll of steel in which the orders are placed.
+    :return: The skyline results. A list with starting coordinates and the width of the lowest skyline.
     """
+
+    # Initiate coordinates, possible width counter and the list in which the values must be saved.
     row = 0
     startingCol = 0
     counter = 0
-    skyline = []
-    find = False
+    skylineValues = []
 
+    # Find the lowest skyline in the roll of steel
     for i in range(roll.shape[0]):
         for j in range(roll.shape[1]):
+
+            # Update coordinates only if no skyline has been found yet.
             if counter == 0:
                 row = i
                 startingCol = j
 
-            # Skyline[0] the row in which the skyline lies, skyline[1] the column and skyline[2] the width of skyline
+            # Save in skylineValues[0] the row coordinate, skylineValues[1] the column coordinate
+            # and in skylineValues[2] the width of skyline
             if counter != 0 and (row != i or roll[i][j] != 0):
-                skyline.append(row)
-                skyline.append(startingCol)
-                skyline.append(counter)
-                find = True
-            if find:
+                skylineValues.append(row)
+                skylineValues.append(startingCol)
+                skylineValues.append(counter)
+
+            # Break column loop if skyline is found
+            if skylineValues:
                 break
+
+            # Update counter
             if roll[i][j] == 0:
                 counter += 1
-        if find:
+
+        # Break row loop if skyline is found
+        if skylineValues:
             break
-    return skyline
+
+    return skylineValues
 
 def sort_area(orderlist):
     """
-    Sort a list of orders from largest surface area to smallest.
-    :param orderlist: list of (remaining) orders that need to be sorted
-    :return: list of sorted orders
+    This function sort a list of orders from largest surface area to smallest.
+    :param orderlist: The list of sub orders that need to be sorted
+    :return: A list of sorted sub orders
     """
+
+    # Initiate list for the areas per sub order and the list in which the orders will be placed; sorted on surface area
     areas = []
     orderedlist = []
+
+    # Copy the order list as to not delete the original order list.
     indexableOrders = copy.copy(orderlist)
+
+    # Calculate surface area for each sub order
     for i in range(len(indexableOrders)):
         areas.append(indexableOrders[i][0]*indexableOrders[i][1])
+
+    # Sort the order list
     for i in range(len(indexableOrders)):
+
+        # Find the index of the sub order in the remaining list of sub orders with the largest surface area
         index = areas.index(max(areas))
         orderedlist.append(indexableOrders[index])
+
+        # Delete this sub order so it will nog be appended to the ordered list twice.
         del areas[index]
         del indexableOrders[index]
+
     return orderedlist
 
 def sort_long(orderlist):
     """
-    Sort a list of orders from largest long side to smallest. Example: To make sure [4,3] comes before [4,2] in the
-    sorted list, the orderlist is first sorted on surface area.
-    :param orderlist: list of (remaining) orders that need to be sorted
-    :return: list of sorted orders
+    This function sorts a list of sub orders from largest long side to smallest.
+    But, for example, to make sure [4,3] comes before [4,2] in the sorted list,
+    the orderlist is first sorted on surface area.
+    :param orderlist: List of (remaining) orders that need to be sorted
+    :return: List of sorted orders
     """
+
+    # Sort the list first on area
     orderlist = sort_area(orderlist)
+
+    # Initiate ordered list of sub orders and create a copy the original order list as to not delete the order list
     orderedlist = []
     indexableOrders = copy.copy(orderlist)
+
+    # Switch elements in the lists within the order list if second element has a larger value
     for i in range(len(indexableOrders)):
         if indexableOrders[i][0] < indexableOrders[i][1]:
             indexableOrders[i][0], indexableOrders[i][1] = indexableOrders[i][1], indexableOrders[i][0]
+
+    # Make a list with only the largest element (= first element) of each sub list in indexableOrders
     firstelement = list(map(lambda x: x[0], indexableOrders))
 
+    # Sort orders by finding the index of largest order, append this sub order to orderedList
     for i in range(len(indexableOrders)):
         index = firstelement.index(max(firstelement))
         orderedlist.append(indexableOrders[index])
+
+        # Delete the ordered sub order as to not use it twice.
         del firstelement[index]
         del indexableOrders[index]
+
     return orderedlist
 
 def sort_short(orderlist):
     """
-    Sort a list of orders from largest short side to smallest. Example: To make sure [4,7] comes before [4,6] in the
-    sorted list, the orderlist is first sorted on surface area.
-    :param orderlist: list of (remaining) orders that need to be sorted
-    :return: list of sorted orders
+    This function sorts a list of sub orders from largest short side to smallest.
+    But, for example, to make sure [4,6] comes before [4,5] in the sorted list,
+    the orderlist is first sorted on surface area.
+    :param orderlist: List of (remaining) orders that need to be sorted
+    :return: List of sorted orders
     """
+
+    # Sort the list first on area
     orderlist = sort_area(orderlist)
+
+    # Initiate ordered list of sub orders and create a copy the original order list as to not delete the order list
     orderedlist = []
     indexableOrders = copy.copy(orderlist)
+
+    # Switch elements in the lists within the order list if second element has a smaller value
     for i in range(len(indexableOrders)):
         if indexableOrders[i][0] > indexableOrders[i][1]:
             indexableOrders[i][0], indexableOrders[i][1] = indexableOrders[i][1], indexableOrders[i][0]
+
+    # Make a list with only the smallest element (= first element) of each sub list in indexableOrders
     firstelement = list(map(lambda x: x[0], indexableOrders))
 
+    # Sort orders by finding the index of largest short side per sub order, append this sub order to orderedList
     for i in range(len(indexableOrders)):
         index = firstelement.index(max(firstelement))
         orderedlist.append(indexableOrders[index])
+
+        # Delete the ordered sub order as to not use it twice.
         del firstelement[index]
         del indexableOrders[index]
     return orderedlist
 
 def sorted_orders(orderlist):
     """
-    Sort a list of orders in three ways: long or sort side or area. If you'd like to change the manner of sorting you
-    only need to change this function.
-    :param orderlist: list of (remaining) orders that need to be sorted
-    :return: list of sorted orders
+    This function sorts a list of orders in three ways: long or sort side or area.
+    If you'd like to change the manner of sorting you only need to change this function.
+    :param orderlist: A List of (remaining) orders that need to be sorted.
+    :return: A List of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_short(orderlist)
+    sortedOrders = sort_long(orderlist)
     return sortedOrders
 
 def visualisation(roll):
     """
-    Visualize how the sub orders are placed in the roll that is used.
-    :param roll: numpy array in which the orders are placed
+    This function visualizes how the sub orders are placed in the numpy array that represents a roll of steel.
+    :param roll: A numpy array in which the all the sub orders are placed.
     """
+
+    # Remove all rows with only zeros from numpy array
     roll = roll[~np.all(roll == 0, axis=1)]
+
+    # Change empty space to NaN so it's visualized as white space
     for i in range(roll.shape[0]):
         for j in range(roll.shape[1]):
             if roll[i][j] == 9999 or roll[i][j] == 0:
                 roll[i][j] = "NaN"
+
+    # Create image and show image in computers cmd
     plt.imshow(roll, cmap='gist_ncar')
     plt.show()
