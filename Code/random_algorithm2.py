@@ -11,7 +11,12 @@ orderlist = order1.orderlist
 rollC = np.zeros((order1.maxLengthRoll, ROLL_C))
 random.shuffle(remainingOrders)
 
+# Place sub orders from an order randomly for 500 times
+def pack(remainingOrders, roll):
 
+
+
+pack(orderlist, rollC)
 
 
 
