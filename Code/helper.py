@@ -105,7 +105,6 @@ def create_roll(maxLength, type):
     roll = np.zeros((maxLength, type))
     return roll
 
-
 def empty_space(roll):
     """
     This function searches for the next empty corner (zero). After it found an empty corner it checks how much
