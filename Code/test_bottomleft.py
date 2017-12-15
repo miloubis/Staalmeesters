@@ -1,46 +1,107 @@
 from helper import *
 from load_orders import *
-from classes import *
 import numpy as np
 
 # load orderlist
-orderlist = order1.orderlist
+from Code.helper import visualisation
 
-# create grid for steel roll
-maxLengthRoll = int(order1.maxLengthRoll/10)
-widthRoll = int(ROLL_C/10)
-rollC = np.zeros((maxLengthRoll,widthRoll))
+orderlist = sorted_orders(order1.orderlist)
+maxLength = order1.maxLengthRoll
+rollC = np.zeros((maxLength, ROLL_C))
 
-# divide orderlist by 10
-dividedOrderlist = []
-for i in range(len(orderlist)):
-    order1 = int(orderlist[i][0] / 10)
-    order2 = int(orderlist[i][1] / 10)
-    dividedOrderlist.append([order1,order2])
-
-# sort orderlist
-sortedlist = sort_area(dividedOrderlist)
-
-def pack_bottom_left(m,sortedlist,zeropos):
+# search for empty space
+def empty_space(roll):
     """
-    Pack sub-order in the roll
+    Find the next bottom left corner to place a suborder and find possible width.
     """
-    rowpos = zeropos[0]
-    columnpos = zeropos[1]
-    possibleWidth = zeropos[2]
+    i = 0
+    j = 0
+    indexes = [[0,0]]
+    for i in range(rollC.shape[0]):
+        for j in range(rollC.shape[1]):
+            if roll[i][j] == 0:
+                break
+        columnpos = j
+        rowpos = i
+        indexes.append([rowpos,columnpos])
 
-    if possibleWidth >= sortedlist[1]:
-        width = sortedlist[0]
-        height = sortedlist[1]
-        rollC[rowpos: height, columnpos: width] = m + 1
+    # delete zero positions in the same column
+    newindexes = []
+    for k in range(len(indexes)-1):
+        a = indexes[k][1]
+        b = indexes[k+1][1]
+        c = indexes[k+1][0]
+        d = indexes[k][0]
+        if a != b:
+            newindexes.append([c,b])
+
+    print(newindexes)
+
+    # check amount of zeroes next to zeroposition
+    possiblewidthlist = []
+    for l in range(len(newindexes)):
+        counter = 0
+        rowpos = newindexes[l][0]
+        for m in range(newindexes[l][1], rollC.shape[1]):
+            if rollC[rowpos][m] == 0:
+                counter += 1
+            if roll[rowpos][m] != 0:
+                break
+        possiblewidthlist.append(counter)
+
+    # check amount of zeroes above zeroposition
+    possibleheigthlist = []
+    for l in range(len(newindexes)):
+        counter = 0
+        colpos = newindexes[l][1]
+        # for m in range(0, 4850)
+        for m in range(newindexes[l][0], rollC.shape[0]):
+            if rollC[m][colpos] == 0:
+                counter += 1
+            if roll[m][colpos] != 0:
+                break
+        possibleheigthlist.append(counter)
+
+    emptyspaces = []
+    for n in range(len(possiblewidthlist)):
+        emptyspaces.append([newindexes[n][0],newindexes[n][1],possiblewidthlist[n],possibleheigthlist[n]])
+
+    if len(emptyspaces) == 0:
+        emptyspaces.append([0,0,rollC.shape[1],rollC.shape[0]])
+
+    return emptyspaces
 
 
-for i in range(len(orderlist)):
-    startposition = Skyline(rollC)
-    print(startposition)
-    pack_bottom_left(i,sortedlist[i],Skyline(rollC))
-    print(Skyline(rollC))
 
-np.set_printoptions(threshold=100000, linewidth=350)
-print(rollC.shape[1])
+print(orderlist)
+print("------")
+remainingOrders = orderlist[0:21]
+
+counter = 1
+while remainingOrders:
+
+    print(remainingOrders)
+
+    emptyspaces = empty_space(rollC)
+    print(emptyspaces)
+
+    rowpos = 0
+    columnpos = 0
+    for i in range(len(emptyspaces)):
+        if emptyspaces[i][2] >= remainingOrders[0][1] and emptyspaces[i][3] >= remainingOrders[0][0]:
+            break
+    rowpos = emptyspaces[i][0]
+    columnpos = emptyspaces[i][1]
+    print("------")
+    print(emptyspaces[i])
+    print("......")
+    print(rowpos), print(remainingOrders[0][0]), print(columnpos), print(remainingOrders[0][1])
+    print("######")
+    rollC[rowpos:remainingOrders[0][0]+rowpos,columnpos:remainingOrders[0][1]+columnpos] = counter + 1
+
+    counter +=1
+    remainingOrders.pop(0)
+
+
+visualisation(rollC)
 
