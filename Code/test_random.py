@@ -21,7 +21,7 @@ col2 = 0
 roll = np.zeros((100000, 1000))
 
 # Place the randomly shuffled subOrders in the roll
-def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
+def pack_random(remainingOrders, orderNum, row, row2, col, col2, col3, roll):
     """
     Shuffle the remaining orders randomly and place them in the roll
     :param remainingOrders: a list of lists of the remaining orders and their specifications
@@ -43,14 +43,21 @@ def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
                 count = 1
             elif j == roll.shape[1]-1 and count == 0:
                 row += 1
-                pack_random(subOrder, orderNum, row, row2, col, col2, roll)
+                pack_random(subOrder, orderNum, row, row2, col, col2, col3, roll)
             if count == 1:
                 for k in range(roll.shape[1]):
-                    if roll[row][col + k] != 0 or k == roll.shape[1]-1:
+                    if roll[row][col + k] != 0 or k == roll.shape[1] - 1:
                         col2 = col + k
                 space = col2 - col
-                for l in range(roll.shape[0]):
-                    if roll[]
+
+                # 300 moet maximale hoogte van een order zijn
+                for l in range(300):
+                    row2 = l
+                    if roll[l + 1][col] != 0 or roll[l + 1][col2] != 0:
+                        break
+
+
+
 
                 if subOrder[1] <= space and subOrder[0] <= space2:
 
