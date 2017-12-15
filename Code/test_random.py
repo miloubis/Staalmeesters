@@ -2,15 +2,17 @@ from helper import *
 from load_orders import *
 import numpy as np
 import random
+import sys
+
+sys.setrecursionlimit(10000)
 
 # Define orderlist
 orderlist = [[200, 200], [200, 300], [100, 300], [400, 400], [200, 200]]
 
 # Create starting values for orderNum, row and col to keep track of
-orderNum = 1
+orderNum = 0
 row = 0
 col = 0
-
 
 # Create roll
 roll = np.zeros((100000, 1000))
@@ -26,11 +28,10 @@ def pack_random(remainingOrders, orderNum, row, col, roll):
     :param orderNum: the number of the order being placed
     :return: visualisation of roll with placed orders using visualisation
     """
-    random.shuffle(remainingOrders)
     for j in range(len(remainingOrders)):
         subOrder = remainingOrders[j]
         orderNum += 1
-        if subOrder[1] <= 1000 - col:
+        if subOrder[1] <= roll.shape[1] - col:
             for n in range(subOrder[0]):
                 for m in range(subOrder[1]):
                     roll[row + n][col + m] = orderNum
@@ -56,7 +57,7 @@ def pack2_random(subOrder, orderNum, row, col, roll):
     for k in range(1000):
         if roll[row][k] == 0:
             count = k
-            if subOrder[1] <= 1000-count:
+            if subOrder[1] <= roll.shape[1] - count:
                 for o in range(subOrder[0]):
                     for p in range(subOrder[1]):
                         roll[row + o][count + p] = orderNum
@@ -64,6 +65,7 @@ def pack2_random(subOrder, orderNum, row, col, roll):
                 row += 100
                 pack2_random(subOrder, row, orderNum, col, roll)
 
+pack_random(orderlist, orderNum, row, col, roll)
 
 # Simulate for 500 times and save the best outcome
 #costs = []
