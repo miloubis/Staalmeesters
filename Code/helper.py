@@ -105,6 +105,70 @@ def create_roll(maxLength, type):
     roll = np.zeros((maxLength, type))
     return roll
 
+
+def empty_space(roll):
+    """
+    This function searches for the next empty corner (zero). After it found an empty corner it checks how much
+    space there is around the empty corner (possible width and possible height).
+    :param roll: The roll in which the function has to search for an empty corner
+    :return: An array with the index, the possible width, and the possible height of the empty corner.
+    """
+    i = 0
+    j = 0
+    indexes = [[0,0]]
+    for i in range(roll.shape[0]):
+        for j in range(roll.shape[1]):
+            if roll[i][j] == 0:
+                break
+        columnpos = j
+        rowpos = i
+        indexes.append([rowpos,columnpos])
+
+    # delete zero positions in the same column
+    newindexes = []
+    for k in range(len(indexes)-1):
+        a = indexes[k][1]
+        b = indexes[k+1][1]
+        c = indexes[k+1][0]
+        if a != b:
+            newindexes.append([c,b])
+
+    print(newindexes)
+
+    # check amount of zeroes next to zeroposition
+    possiblewidthlist = []
+    for l in range(len(newindexes)):
+        counter = 0
+        rowpos = newindexes[l][0]
+        for m in range(newindexes[l][1], roll.shape[1]):
+            if roll[rowpos][m] == 0:
+                counter += 1
+            if roll[rowpos][m] != 0:
+                break
+        possiblewidthlist.append(counter)
+
+    # check amount of zeroes above zeroposition
+    possibleheigthlist = []
+    for l in range(len(newindexes)):
+        counter = 0
+        colpos = newindexes[l][1]
+        # for m in range(0, 4850)
+        for m in range(newindexes[l][0], roll.shape[0]):
+            if roll[m][colpos] == 0:
+                counter += 1
+            if roll[m][colpos] != 0:
+                break
+        possibleheigthlist.append(counter)
+
+    emptyspaces = []
+    for n in range(len(possiblewidthlist)):
+        emptyspaces.append([newindexes[n][0],newindexes[n][1],possiblewidthlist[n],possibleheigthlist[n]])
+
+    if len(emptyspaces) == 0:
+        emptyspaces.append([0,0,roll.shape[1],roll.shape[0]])
+
+    return emptyspaces
+
 def fill(roll, skyline):
     """
     This function fills the space in which no sub order fits with a filler of 9999 (arbitrary).
