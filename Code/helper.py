@@ -91,7 +91,7 @@ def sorted_orders(orderlist):
     :return: list of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_short(orderlist)
+    sortedOrders = sort_area(orderlist)
     return sortedOrders
 
 def rotation(subOrder):
