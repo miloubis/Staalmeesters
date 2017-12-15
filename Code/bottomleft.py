@@ -23,16 +23,21 @@ while remainingOrders:
     for i in range(len(emptyspaces)):
         if emptyspaces[i][2] >= remainingOrders[0][1] and emptyspaces[i][3] >= remainingOrders[0][0]:
             break
+
     rowpos = emptyspaces[i][0]
     columnpos = emptyspaces[i][1]
+    if emptyspaces[i][4] > 0:
+        rowpos = rowpos - emptyspaces[i][4] + 1
+    rollC[rowpos:remainingOrders[0][0]+rowpos,columnpos:remainingOrders[0][1]+columnpos] = counter + 1
+
     print("------")
     print(emptyspaces[i])
     print("......")
     print(rowpos), print(remainingOrders[0][0]), print(columnpos), print(remainingOrders[0][1])
     print("######")
-    rollC[rowpos:remainingOrders[0][0]+rowpos,columnpos:remainingOrders[0][1]+columnpos] = counter + 1
 
     counter +=1
+
     remainingOrders.pop(0)
 
 
