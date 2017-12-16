@@ -132,8 +132,6 @@ def empty_space(roll):
         if a != b:
             newindexes.append([c,b])
 
-    print(newindexes)
-
     # check amount of zeroes next to zeroposition
     possiblewidthlist = []
     for l in range(len(newindexes)):
@@ -159,12 +157,24 @@ def empty_space(roll):
                 break
         possibleheigthlist.append(counter)
 
+    # check amount of zeroes under zeroposition
+    possiblewastelist = []
+    for l in range(len(newindexes)):
+        counter = 0
+        colpos = newindexes[l][1]
+        for m in range(newindexes[l][0], 0, -1):
+            if roll[m][colpos] == 0:
+                counter += 1
+            if roll[m][colpos] != 0:
+                break
+        possiblewastelist.append(counter)
+
     emptyspaces = []
     for n in range(len(possiblewidthlist)):
-        emptyspaces.append([newindexes[n][0],newindexes[n][1],possiblewidthlist[n],possibleheigthlist[n]])
+        emptyspaces.append([newindexes[n][0],newindexes[n][1],possiblewidthlist[n],possibleheigthlist[n],possiblewastelist[n]])
 
     if len(emptyspaces) == 0:
-        emptyspaces.append([0,0,roll.shape[1],roll.shape[0]])
+        emptyspaces.append([0,0,roll.shape[1],roll.shape[0],0])
 
     return emptyspaces
 
@@ -428,7 +438,7 @@ def sorted_orders(orderlist):
     :return: A List of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_long(orderlist)
+    sortedOrders = sort_area(orderlist)
     return sortedOrders
 
 def visualisation(roll):

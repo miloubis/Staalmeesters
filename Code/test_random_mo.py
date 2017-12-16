@@ -40,21 +40,15 @@ def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
             if roll[row][j] == 0 and count == 0:
                 col = j
                 count = 1
-                print(col)
-            if j == roll.shape[1]-1 and count == 0:
+            elif j == roll.shape[1]-1 and count == 0:
                 row += 1
                 pack_random(remainingOrders, orderNum, row, row2, col, col2, roll)
             if count == 1:
                 orderNum += 1
-
                 for k in range(roll.shape[1]):
                     if col + k == roll.shape[1] - 1 or roll[row][col + k] != 0:
                         col2 = col + k
                         break
-<<<<<<< HEAD
-=======
-
->>>>>>> fa3634212514825b2d67db3e1a5a8aa00ca9a097
                 colSpace = col2 - col + 1
                 for l in range(subOrder[0]):
                     if roll[row + l + 1][col] != 0 or roll[row + l + 1][col2] != 0:
@@ -62,37 +56,20 @@ def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
                     elif roll[row + subOrder[0] - 1][col] == 0:
                         row2 = subOrder[0] - 1
                         break
-<<<<<<< HEAD
                 rowSpace = row2 - row + 1
-=======
-                rowSpace = row2 - row +1
-
->>>>>>> fa3634212514825b2d67db3e1a5a8aa00ca9a097
                 if subOrder[0] <= rowSpace:
                     if subOrder[1] <= colSpace:
                         for m in range(subOrder[0]):
                             for n in range(subOrder[1]):
                                 roll[row + m][col + n] = orderNum
                         remainingOrders.remove(subOrder)
-<<<<<<< HEAD
 
-=======
-                        print(remainingOrders)
-
-    
->>>>>>> fa3634212514825b2d67db3e1a5a8aa00ca9a097
     visualisation(roll)
-    return roll
 
-<<<<<<< HEAD
     # return roll
 
 pack_random(orderlist, orderNum, row, row2, col, col2, roll)
 # roll = pack_random(orderlist, orderNum, row, row2, col, col2, roll)
-=======
-
-roll = pack_random(orderlist, orderNum, row, row2, col, col2, roll)
->>>>>>> fa3634212514825b2d67db3e1a5a8aa00ca9a097
 
 # def pack2_random(subOrder, orderNum, row, col, roll):
 #     """
