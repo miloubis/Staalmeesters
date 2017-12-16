@@ -230,6 +230,89 @@ def pack_bestfit(roll, skyline, bestFit, orderNum):
             roll[row + i][startingCol + j] = orderNum
     return roll
 
+def pack_bottom_left(rolltype, order,exercise):
+
+    # Initialize orderlist, remainingorders, maxlength and create grid of zeroes
+    orderlist = sorted_orders(order.orderlist)
+    maxLength = order.maxLengthRoll
+    roll = create_roll(maxLength, rolltype)
+
+    if exercise == 1:
+        remainingOrders = orderlist
+    elif exercise == 2:
+        remainingOrders = orderlist[0:30]
+    elif exercise == 3:
+        remainingOrders = orderlist[30:60]
+    elif exercise == 4:
+        remainingOrders = orderlist[0:20]
+    elif exercise == 5:
+        remainingOrders = orderlist[20:40]
+    elif exercise == 6:
+        remainingOrders = orderlist[40:52]
+
+    # Loop through remaining orders and delete suborder if suborder is packed
+    counter = 1
+    while remainingOrders:
+
+        # Print ordernumber
+        print("Ordernummer:")
+        print(counter)
+
+        # Check zero positions and empty spaces around the zero positions
+        emptyspaces = empty_space(roll)
+
+        # Check if suborder fits in empty space found by emptyspaces function
+        rowpos = 0
+        columnpos = 0
+        for i in range(len(emptyspaces)):
+            if emptyspaces[i][2] >= remainingOrders[0][1] and emptyspaces[i][3] >= remainingOrders[0][0]:
+                break
+
+        # Save upper left corner from the suborder
+        rowpos = emptyspaces[i][0]
+        columnpos = emptyspaces[i][1]
+
+        # Save upper right corner from the suborder
+        columnpos_r = emptyspaces[i][1] + remainingOrders[0][1] - 1
+
+        # Check empty space above upper right corner
+        possiblewasteright = 0
+        if emptyspaces[i][4] > 0:
+            n = 0
+            for m in range(rowpos, 0, -1):
+                if roll[m][columnpos_r] == 0:
+                    n += 1
+                if roll[m][columnpos_r] != 0:
+                    break
+            possiblewasteright = n
+
+        # Check empty space above upper left corner and upper right corner
+        if emptyspaces[i][4] <= possiblewasteright:
+            smallest = emptyspaces[i][4] - 1
+        else:
+            smallest = possiblewasteright - 1
+
+        # Count empty rows above suborder
+        freerows = 0
+        for q in range(rowpos, rowpos - smallest, -1):
+            for r in range(columnpos,columnpos_r):
+                if roll[q][r] != 0:
+                    break
+            freerows += 1
+
+        # If empty space is bigger than 1 move suborder up by amount of freerows
+        if smallest > 1:
+            rowpos = rowpos - freerows - 1
+
+        # Pack suborder and delete suborder from the list
+        roll[rowpos:remainingOrders[0][0]+rowpos,columnpos:remainingOrders[0][1]+columnpos] = counter
+        remainingOrders.pop(0)
+
+        # Go to next order in the list
+        counter +=1
+
+    return roll
+
 def rotation(subOrder):
     """
     This function rotates a sub order with 90 degrees.
@@ -431,7 +514,7 @@ def sorted_orders(orderlist):
     :return: A List of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_long(orderlist)
+    sortedOrders = sort_short(orderlist)
     return sortedOrders
 
 def visualisation(roll):

@@ -35,5 +35,5 @@ class Order:
         """
         maxLength = 0
         for i in range(len(orderlist)):
-            maxLength += max(orderlist[i][0], orderlist[i][1])
+            maxLength += min(orderlist[i][0], orderlist[i][1])
         return maxLength
