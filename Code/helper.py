@@ -112,6 +112,8 @@ def empty_space(roll):
     :param roll: The roll in which the function has to search for an empty corner
     :return: An array with the index, the possible width, and the possible height of the empty corner.
     """
+
+    # Search for zero positions
     i = 0
     j = 0
     indexes = [[0,0]]
@@ -123,46 +125,36 @@ def empty_space(roll):
         rowpos = i
         indexes.append([rowpos,columnpos])
 
-    # delete zero positions in the same column
-    newindexes = []
-    for k in range(len(indexes)-1):
-        a = indexes[k][1]
-        b = indexes[k+1][1]
-        c = indexes[k+1][0]
-        if a != b:
-            newindexes.append([c,b])
-
-    # check amount of zeroes next to zeroposition
+    # Check amount of zeroes next to zeroposition
     possiblewidthlist = []
-    for l in range(len(newindexes)):
+    for l in range(len(indexes)):
         counter = 0
-        rowpos = newindexes[l][0]
-        for m in range(newindexes[l][1], roll.shape[1]):
+        rowpos = indexes[l][0]
+        for m in range(indexes[l][1], roll.shape[1]):
             if roll[rowpos][m] == 0:
                 counter += 1
             if roll[rowpos][m] != 0:
                 break
         possiblewidthlist.append(counter)
 
-    # check amount of zeroes above zeroposition
+    # Check amount of zeroes above zeroposition
     possibleheigthlist = []
-    for l in range(len(newindexes)):
+    for l in range(len(indexes)):
         counter = 0
-        colpos = newindexes[l][1]
-        # for m in range(0, 4850)
-        for m in range(newindexes[l][0], roll.shape[0]):
+        colpos = indexes[l][1]
+        for m in range(indexes[l][0], roll.shape[0]):
             if roll[m][colpos] == 0:
                 counter += 1
             if roll[m][colpos] != 0:
                 break
         possibleheigthlist.append(counter)
 
-    # check amount of zeroes under zeroposition
+    # Check amount of zeroes under zeroposition
     possiblewastelist = []
-    for l in range(len(newindexes)):
+    for l in range(len(indexes)):
         counter = 0
-        colpos = newindexes[l][1]
-        for m in range(newindexes[l][0], 0, -1):
+        colpos = indexes[l][1]
+        for m in range(indexes[l][0], 0, -1):
             if roll[m][colpos] == 0:
                 counter += 1
             if roll[m][colpos] != 0:
@@ -171,7 +163,8 @@ def empty_space(roll):
 
     emptyspaces = []
     for n in range(len(possiblewidthlist)):
-        emptyspaces.append([newindexes[n][0],newindexes[n][1],possiblewidthlist[n],possibleheigthlist[n],possiblewastelist[n]])
+        emptyspaces.append([indexes[n][0],indexes[n][1],possiblewidthlist[n],possibleheigthlist[n],
+                            possiblewastelist[n]])
 
     if len(emptyspaces) == 0:
         emptyspaces.append([0,0,roll.shape[1],roll.shape[0],0])
@@ -438,7 +431,7 @@ def sorted_orders(orderlist):
     :return: A List of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_area(orderlist)
+    sortedOrders = sort_long(orderlist)
     return sortedOrders
 
 def visualisation(roll):
