@@ -1,7 +1,7 @@
 """
 Helper.py
 Staalmeester case
-
+-
 This file contains all the functions that are used in the three algorithms.
 The functions are presented in alphabetical order.
 In helper the constants for roll width and roll cost per meter are defined as well.

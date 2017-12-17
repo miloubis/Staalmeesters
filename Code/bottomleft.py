@@ -28,7 +28,3 @@ print("The cost of this order is: € %.2f" % cost)
 visualisation(packedRoll1)
 # visualisation(packedRoll2)
 # visualisation(packedRoll3)
-
-
-
-
