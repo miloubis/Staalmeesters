@@ -70,7 +70,6 @@ def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
                             roll[row + m][col + n] = orderNum
                     remainingOrders.remove(subOrder)
                     print "remainingOrders= ", remainingOrders
-                    break
                 else: 
                     row2 = 0
                     col2 = 0
