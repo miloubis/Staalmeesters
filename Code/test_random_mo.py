@@ -4,10 +4,10 @@ import numpy as np
 import random
 import sys
 
-sys.setrecursionlimit(10000)
+
 
 # Define orderlist
-orderlist = [[200, 200], [200, 300], [100, 300], [400, 400], [200, 200]]
+orderlist = [[2,2], [2,3], [4,5], [6,7]]
 
 # Create starting values for orderNum, row and col to keep track of
 orderNum = 0
@@ -18,7 +18,7 @@ col2 = 0
 
 
 # Create roll
-roll = np.zeros((100000, 1000))
+roll = np.zeros((100, 10))
 
 
 # Place the randomly shuffled subOrders in the roll
@@ -37,34 +37,41 @@ def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
         count = 0
         subOrder = remainingOrders[0]
         for j in range(roll.shape[1]):
+            temp = j
             if roll[row][j] == 0 and count == 0:
-                col = j
+                col = temp
                 count = 1
-            elif j == roll.shape[1]-1 and count == 0:
+                print "count = ", count
+                break
+            elif j == roll.shape[1] - 1 and count == 0:
                 row += 1
                 pack_random(remainingOrders, orderNum, row, row2, col, col2, roll)
-            if count == 1:
-                orderNum += 1
-                for k in range(roll.shape[1]):
-                    if col + k == roll.shape[1] - 1 or roll[row][col + k] != 0:
-                        col2 = col + k
+        if count == 1:
+            orderNum += 1
+            print "orderNum= ", orderNum
+            for k in range(roll.shape[1]):
+                if col + k == roll.shape[1] - 1 or roll[row][col + k] != 0:
+                    col2 = col + k
+                    break
+                else:
+                    col2 = col + subOrder[1] -1
+            colSpace = col2 - col + 1
+            print "colSpace = ", colSpace
+            for l in range(subOrder[0]):
+                    if roll[row + l - 1][col] != 0 or roll[row + l - 1][col2] != 0:
                         break
-                colSpace = col2 - col + 1
-                for l in range(subOrder[0]):
-                    if roll[row + l + 1][col] != 0 or roll[row + l + 1][col2] != 0:
-                        row2 = l
-                    elif roll[row + subOrder[0] - 1][col] == 0:
-                        row2 = subOrder[0] - 1
-                        break
-                rowSpace = row2 - row + 1
-                if subOrder[0] <= rowSpace:
-                    if subOrder[1] <= colSpace:
-                        for m in range(subOrder[0]):
-                            for n in range(subOrder[1]):
-                                roll[row + m][col + n] = orderNum
-                        remainingOrders.remove(subOrder)
-
-    visualisation(roll)
+                    else:
+                        row2 = subOrder[0]
+            rowSpace = row2 - row
+            print "rowSpace= ", rowSpace
+            if subOrder[0] <= rowSpace:
+                if subOrder[1] <= colSpace:
+                    for m in range(subOrder[0]):
+                        for n in range(subOrder[1]):
+                            roll[row + m][col + n] = orderNum
+                    remainingOrders.remove(subOrder)
+                    print "remainingOrders= ", remainingOrders
+    print roll
 
     # return roll
 
