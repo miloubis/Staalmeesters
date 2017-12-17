@@ -232,11 +232,14 @@ def pack_bestfit(roll, skyline, bestFit, orderNum):
 
 def pack_bottom_left(rolltype, order,exercise):
 
+    # Divide maxLength by 2 to make program faster
+    maxLength = int(order.maxLengthRoll / 2)
+
     # Initialize orderlist, remainingorders, maxlength and create grid of zeroes
     orderlist = sorted_orders(order.orderlist)
-    maxLength = order.maxLengthRoll
     roll = create_roll(maxLength, rolltype)
 
+    # Divide orders into parts for exercises
     if exercise == 1:
         remainingOrders = orderlist
     elif exercise == 2:
@@ -514,7 +517,7 @@ def sorted_orders(orderlist):
     :return: A List of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_short(orderlist)
+    sortedOrders = sort_area(orderlist)
     return sortedOrders
 
 def visualisation(roll):
