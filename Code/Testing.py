@@ -37,14 +37,27 @@ def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos
 
         # check if height of the sub order will not overlap with another order above it.
         if roll[rowPos + subOrder[0] - 1][columnPos] == 0 and roll[rowPos + subOrder[0] - 1][columnPos2] == 0:
-            rowPos2 = rowPos + subOrder[0] - 1
-        else:
+
+            # Check if there will not be an order overlapping in the middle
             for row in range(subOrder[0]):
                 if roll[rowPos + row + 1][columnPos] != 0 or roll[rowPos + row + 1][columnPos2] != 0:
-                    rowPos2 = row
+                    rowPos2 = rowPos + row
                     break
+
+                # if no overlap in the middle
+                if row == subOrder[0] - 1:
+                    rowPos2 = rowPos + subOrder[0] - 1
+
+        # if there will be overlap with an order above this sub order's height
+        else:
+            rowPos += 10
+            columnPos = 0
+            columnPos2 = 0
+            rowPos2 = 0
+            pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+
         rowSpace = rowPos2 - rowPos + 1
-        print(rowSpace)
+
 
         # Place sub order in roll if possible, otherwise up rowPos with 10 and call function again.
         if subOrder[0] <= rowSpace and subOrder[1] <= columnSpace:
