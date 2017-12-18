@@ -1,6 +1,7 @@
 from helper import *
 from load_orders import *
 
+# Exercise A
 # Initialize orderlist, remainingorders, maxlength and create grid of zeroes
 orderlist = sorted_orders(order1.orderlist)
 remainingOrders = orderlist
