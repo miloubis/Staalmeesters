@@ -121,55 +121,55 @@ def empty_space(roll):
         for j in range(roll.shape[1]):
             if roll[i][j] == 0:
                 break
-        columnpos = j
-        rowpos = i
-        indexes.append([rowpos,columnpos])
+        columnPos = j
+        rowPos = i
+        indexes.append([rowPos, columnPos])
 
-    # Check amount of zeroes next to zeroposition
-    possiblewidthlist = []
+    # Check amount of zeroes next to zero position
+    possibleWidthList = []
     for l in range(len(indexes)):
         counter = 0
-        rowpos = indexes[l][0]
+        rowPos = indexes[l][0]
         for m in range(indexes[l][1], roll.shape[1]):
-            if roll[rowpos][m] == 0:
+            if roll[rowPos][m] == 0:
                 counter += 1
-            if roll[rowpos][m] != 0:
+            if roll[rowPos][m] != 0:
                 break
-        possiblewidthlist.append(counter)
+        possibleWidthList.append(counter)
 
     # Check amount of zeroes above zeroposition
-    possibleheigthlist = []
+    possibleHeigthList = []
     for l in range(len(indexes)):
         counter = 0
-        colpos = indexes[l][1]
+        colPos = indexes[l][1]
         for m in range(indexes[l][0], roll.shape[0]):
-            if roll[m][colpos] == 0:
+            if roll[m][colPos] == 0:
                 counter += 1
-            if roll[m][colpos] != 0:
+            if roll[m][colPos] != 0:
                 break
-        possibleheigthlist.append(counter)
+        possibleHeigthList.append(counter)
 
-    # Check amount of zeroes under zeroposition
-    possiblewastelist = []
+    # Check amount of zeroes under zero position
+    possibleWasteList = []
     for l in range(len(indexes)):
         counter = 0
-        colpos = indexes[l][1]
+        colPos = indexes[l][1]
         for m in range(indexes[l][0], 0, -1):
-            if roll[m][colpos] == 0:
+            if roll[m][colPos] == 0:
                 counter += 1
-            if roll[m][colpos] != 0:
+            if roll[m][colPos] != 0:
                 break
-        possiblewastelist.append(counter)
+        possibleWasteList.append(counter)
 
-    emptyspaces = []
-    for n in range(len(possiblewidthlist)):
-        emptyspaces.append([indexes[n][0],indexes[n][1],possiblewidthlist[n],possibleheigthlist[n],
-                            possiblewastelist[n]])
+    emptySpaces = []
+    for n in range(len(possibleWidthList)):
+        emptySpaces.append([indexes[n][0],indexes[n][1],possibleWidthList[n],possibleHeigthList[n],
+                            possibleWasteList[n]])
 
-    if len(emptyspaces) == 0:
-        emptyspaces.append([0,0,roll.shape[1],roll.shape[0],0])
+    if len(emptySpaces) == 0:
+        emptySpaces.append([0, 0, roll.shape[1], roll.shape[0], 0])
 
-    return emptyspaces
+    return emptySpaces
 
 def fill(roll, skyline):
     """
@@ -229,6 +229,73 @@ def pack_bestfit(roll, skyline, bestFit, orderNum):
         for j in range(bestFit.shape[1]):
             roll[row + i][startingCol + j] = orderNum
     return roll
+
+def pack_bottomleft(remainingOrders, roll):
+    """
+    
+    :param roll: 
+    :param remainingOrders: 
+    :return: 
+    """
+    counter = 1
+    while remainingOrders:
+
+        # Check zero positions and empty spaces around the zero positions
+        emptySpaces = empty_space(roll)
+
+        # Check if suborder fits in empty space found by emptySpaces function
+        rowPos = 0
+        columnPos = 0
+        for i in range(len(emptySpaces)):
+            if emptySpaces[i][2] >= remainingOrders[0][1] and emptySpaces[i][3] >= remainingOrders[0][0]:
+                break
+
+        # Save upper left corner from the suborder
+        rowPos = emptySpaces[i][0]
+        columnPos = emptySpaces[i][1]
+
+        # Save upper right corner from the suborder
+        columnPos_r = emptySpaces[i][1] + remainingOrders[0][1] - 1
+
+        # Check empty space above upper right corner
+        possibleWasteRight = 0
+        if emptySpaces[i][4] > 0:
+            n = 0
+            for m in range(rowPos, 0, -1):
+                if roll[m][columnPos_r] == 0:
+                    n += 1
+                if roll[m][columnPos_r] != 0:
+                    break
+            possibleWasteRight = n
+
+        # Check empty space above upper left corner and upper right corner
+        if emptySpaces[i][4] <= possibleWasteRight:
+            smallest = emptySpaces[i][4] - 1
+        else:
+            smallest = possibleWasteRight - 1
+
+        # Count empty rows above suborder
+        freeRows = 0
+        for q in range(rowPos, rowPos - smallest, -1):
+            for r in range(columnPos, columnPos_r):
+                if roll[q][r] != 0:
+                    break
+            freeRows += 1
+
+        # If empty space is bigger than 1 move suborder up by amount of freerows
+        if smallest > 1:
+            rowPos = rowPos - freeRows - 1
+
+        # Pack suborder and delete suborder from the list
+        roll[rowPos:remainingOrders[0][0] + rowPos, columnPos:remainingOrders[0][1] + columnPos] = counter + 1
+        remainingOrders.pop(0)
+
+        # Go to next order in the list
+        counter += 1
+
+    # Return the roll in which al sub orders are placed
+    return roll
+
 
 
 def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
@@ -534,7 +601,7 @@ def sorted_orders(orderlist):
     :return: A List of sorted orders
     """
     # use either sort_long, sort_short or sort_area
-    sortedOrders = sort_long(orderlist)
+    sortedOrders = sort_area(orderlist)
     return sortedOrders
 
 def visualisation(roll):
