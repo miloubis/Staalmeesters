@@ -52,7 +52,7 @@ def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
                 if col + k == roll.shape[1] - 1 or roll[row][col + k] != 0:
                     col2 = col + k - 1
                     break
-                else:
+                else: 
                     col2 = col + subOrder[1] -1
             colSpace = col2 - col + 1
             print "colSpace = ", colSpace
@@ -70,7 +70,6 @@ def pack_random(remainingOrders, orderNum, row, row2, col, col2, roll):
                             roll[row + m][col + n] = orderNum
                     remainingOrders.remove(subOrder)
                     print "remainingOrders= ", remainingOrders
-                    break
                 else: 
                     row2 = 0
                     col2 = 0
