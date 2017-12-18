@@ -9,6 +9,7 @@ In helper the constants for roll width and roll cost per meter are defined as we
 import numpy as np
 from classes import *
 import matplotlib.pylab as plt
+import random
 
 # Define constants
 ROLL_A = 500
@@ -74,22 +75,22 @@ def cost(roll):
     meter = roll.shape[0] / 100
 
     # Calculate the cost of using roll A
-    if roll.shape[1] == 500:
-        costs = meter * COST_A
+    if roll.shape[1] == ROLL_A:
+        costs = round( meter * COST_A, 2)
         results.append(meter)
         results.append(costs)
         return results
 
     # Calculate the cost of using roll B
-    if roll.shape[1] == 520:
-        costs = meter * COST_B
+    if roll.shape[1] == ROLL_B:
+        costs = round(meter * COST_B,2)
         results.append(meter)
         results.append(costs)
         return results
 
     # Calculate the cost of using roll C
-    if roll.shape[1] == 550:
-        costs = meter * COST_C
+    if roll.shape[1] == ROLL_C:
+        costs = round(meter * COST_C, 2)
         results.append(meter)
         results.append(costs)
         return results
@@ -230,6 +231,7 @@ def pack_bestfit(roll, skyline, bestFit, orderNum):
             roll[row + i][startingCol + j] = orderNum
     return roll
 
+<<<<<<< HEAD
 def pack_bottom_left(rolltype, order,exercise):
 
     # Divide maxLength by 2 to make program faster
@@ -314,6 +316,89 @@ def pack_bottom_left(rolltype, order,exercise):
         # Go to next order in the list
         counter +=1
 
+=======
+
+def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
+    """
+    This function packs the randomly shuffled sub orders in a numpy array which represents the roll of steel.
+    :param remainingOrders: A list of lists of the remaining orders and their specifications.
+    :param orderNum: An int to keep track of the sub order that is being placed.
+    :param rowPos: An int to keep track of the first row position, to determine the rowSpace.
+    :param columnPos: An int to keep track of the first column position, to determine the columnSpace.
+    :param rowPos2: An int to keep track of the second row position, to determine the rowSpace.
+    :param columnPos2: An int to keep track of the second column position, to determine the columnSpace.
+    :param roll: A numpy array in which all the sub orders are placed.
+    :return: Roll with every sub order placed.
+    """
+
+    # Loop while there are remaining sub orders and place the first sub order is the list
+    while remainingOrders:
+        subOrder = remainingOrders[0]
+
+        # Reset all positions except rowPos
+        columnPos = 0
+        columnPos2 = 0
+        rowPos2 = 0
+
+        # Check where an empty space in the columns of the roll begins
+        for column in range(roll.shape[1]):
+            if roll[rowPos][column] == 0:
+                columnPos = column
+                break
+
+            # If there is no empty space, up rowPos with 10 and call the function recursively
+            elif column == roll.shape[1] - 1:
+                rowPos += 10
+                pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+
+        # Check where the empty space in the columns of the roll ends
+        for column2 in range(roll.shape[1]):
+            if columnPos + column2 == roll.shape[1] - 1 or roll[rowPos][columnPos + column2 + 1] != 0:
+                columnPos2 = columnPos + column2
+                break
+
+        # Remember how much space is between the column positions
+        columnSpace = columnPos2 - columnPos + 1
+
+        # Check if height of the sub order will not overlap with another order above it.
+        if roll[rowPos + subOrder[0] - 1][columnPos] == 0 and roll[rowPos + subOrder[0] - 1][columnPos2] == 0:
+
+            # Check if there will not be a sub order overlapping in the middle
+            for row in range(subOrder[0]):
+                if roll[rowPos + row + 1][columnPos] != 0 or roll[rowPos + row + 1][columnPos2 -1] != 0:
+                    rowPos2 = rowPos + row
+                    break
+
+                # If no overlap in the middle
+                if row == subOrder[0] - 1:
+                    rowPos2 = rowPos + subOrder[0] - 1
+
+        # If there is overlap with an order above this sub order's height, up rowPos with 10 and call function again
+        else:
+            rowPos += 10
+            pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+
+        # Remember how much space is between the row positions
+        rowSpace = rowPos2 - rowPos + 1
+
+        # Place sub order in roll if it fits in the row and column space
+        if subOrder[0] <= rowSpace and subOrder[1] <= columnSpace:
+            orderNum += 1
+            for rows in range(subOrder[0]):
+                for columns in range(subOrder[1]):
+                    roll[rowPos + rows][columnPos + columns] = orderNum
+            remainingOrders.remove(subOrder)
+
+            # Reset rowPos to zero as well
+            rowPos = 0
+
+        # If sub order does not fit, up rowPos with 10, reset other positions back to zero and call function recursively
+        else:
+            rowPos += 10
+            pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+
+    # Return the roll with all sub orders packed into it
+>>>>>>> origin/master
     return roll
 
 def rotation(subOrder):
@@ -364,6 +449,26 @@ def search(possibleWidth, remainingOrders):
         if bestFit.shape[1] == possibleWidth:
             break
     return bestFit
+
+
+def simulate(orderList, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
+    """
+    This function carries out the pack_random function for 500 times.
+    :return: The outcome with the lowest costs and its costs.
+    """
+    lowestCosts = 0
+    for i in range(500):
+        random.shuffle(orderList)
+        roll = pack_random(orderList, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+        costs = cost(roll)
+        if i == 1:
+            lowestCosts = costs[1]
+            saveRoll = roll
+        else: 
+            if costs[1] < lowestCosts:
+                lowestCosts = costs[1]
+                saveRoll = roll
+    return saveRoll
 
 def skyline(roll):
     """
