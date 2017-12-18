@@ -73,21 +73,21 @@ def cost(roll):
     meter = roll.shape[0] / 100
 
     # Calculate the cost of using roll A
-    if roll.shape[1] == 500:
+    if roll.shape[1] == ROLL_A:
         costs = meter * COST_A
         results.append(meter)
         results.append(costs)
         return results
 
     # Calculate the cost of using roll B
-    if roll.shape[1] == 520:
+    if roll.shape[1] == ROLL_B:
         costs = meter * COST_B
         results.append(meter)
         results.append(costs)
         return results
 
     # Calculate the cost of using roll C
-    if roll.shape[1] == 550:
+    if roll.shape[1] == ROLL_C:
         costs = meter * COST_C
         results.append(meter)
         results.append(costs)

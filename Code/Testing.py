@@ -122,10 +122,6 @@ visualisation(roll)
 
 # pack_random(orderlist, orderNum, row, col, roll)
 
-# Simulate for 500 times and save the best outcome
-#costs = []
-#for i in range(500):
-#    costs.append((i, pack_random(orderlist, orderNum, row, col, roll))
-#x = np.array(costs)
-#index = np.where(x==x.min))[0]
-#minimalcosts = costs[index]
+
+
+
