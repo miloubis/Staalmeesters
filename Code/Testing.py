@@ -29,7 +29,7 @@ def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos
                 pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
 
         for column2 in range(roll.shape[1]):
-            if columnPos + column2 == roll.shape[1] - 1 or roll[rowPos][columnPos + column2] != 0:
+            if columnPos + column2 == roll.shape[1] - 1 or roll[rowPos][columnPos + column2 + 1] != 0:
                 columnPos2 = columnPos + column2
                 break
         columnSpace = columnPos2 - columnPos + 1
@@ -37,9 +37,10 @@ def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos
         # check if height of the sub order will not overlap with another order above it.
         if roll[rowPos + subOrder[0] - 1][columnPos] == 0 and roll[rowPos + subOrder[0] - 1][columnPos2] == 0:
 
+
             # Check if there will not be an order overlapping in the middle
             for row in range(subOrder[0]):
-                if roll[rowPos + row + 1][columnPos] != 0 or roll[rowPos + row + 1][columnPos2] != 0:
+                if roll[rowPos + row + 1][columnPos] != 0 or roll[rowPos + row + 1][columnPos2 -1] != 0:
                     rowPos2 = rowPos + row
                     break
 
@@ -57,7 +58,6 @@ def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos
 
         rowSpace = rowPos2 - rowPos + 1
 
-
         # Place sub order in roll if possible, otherwise up rowPos with 10 and call function again.
         if subOrder[0] <= rowSpace and subOrder[1] <= columnSpace:
             orderNum += 1
@@ -65,7 +65,6 @@ def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos
                 for columns in range(subOrder[1]):
                     roll[rowPos + rows][columnPos + columns] = orderNum
             remainingOrders.remove(subOrder)
-            print(remainingOrders)
             rowPos = 0
             rowPos2 = 0
             columnPos = 0
@@ -78,6 +77,7 @@ def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos
 
 
 # Define orderlist
+# orderlist = [[190, 270], [90, 160], [120, 290], [110, 220], [160, 120], [90, 120], [200, 100], [110, 290], [120, 170], [100, 320]]
 orderlist = order1.orderlist
 maxLength = order1.maxLengthRoll
 
