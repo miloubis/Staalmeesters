@@ -284,8 +284,9 @@ def simulate(orderList, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
     This function carries out the pack_random function for 500 times.
     :return: The outcome with the lowest costs and its costs.
     """
+    lowestCosts = 0
     for i in range(500):
-        roll = pack_random(orderlist, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+        roll = pack_random(orderList, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
         costs = cost(roll)
         if i == 1:
             lowestCosts = costs
@@ -482,8 +483,6 @@ def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos
     :param roll: A numpy array in which all the sub orders are placed.
     :return: Roll with placed sub orders.
     """
-    # Shuffle remaining orders randomly
-    random.shuffle(remainingOrders)
 
     # Keep placing sub orders until remainingOrders is empty
     while remainingOrders:
