@@ -361,6 +361,24 @@ def search(possibleWidth, remainingOrders):
             break
     return bestFit
 
+
+def simulate(orderList, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
+    """
+    This function carries out the pack_random function for 500 times.
+    :return: The outcome with the lowest costs and its costs.
+    """
+    for i in range(500):
+        roll = pack_random(orderlist, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+        costs = cost(roll)
+        if i == 1:
+            lowestCosts = costs
+            saveRoll = roll
+        else: 
+            if costs < lowestCosts:
+                lowestCosts = costs
+                saveRoll = roll
+    return roll
+
 def skyline(roll):
     """
     This function searches for the lowest skyline. It remembers the starting coordinates of this skyline - row position
