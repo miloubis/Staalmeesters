@@ -246,74 +246,72 @@ def pack_bottom_left(rolltype, order, exercise):
     elif exercise == 2:
         remainingOrders = orderlist[0:30]
     elif exercise == 3:
-        remainingOrders = orderlist[30:60]
+        remainingOrders = orderlist[31:62]
     elif exercise == 4:
         remainingOrders = orderlist[0:20]
     elif exercise == 5:
-        remainingOrders = orderlist[20:40]
+        remainingOrders = orderlist[21:40]
     elif exercise == 6:
-        remainingOrders = orderlist[40:52]
+        remainingOrders = orderlist[41:52]
 
     # Loop through remaining orders and delete suborder if suborder is packed
     counter = 1
     while remainingOrders:
 
-        # Print ordernumber
-        print("Ordernummer:")
-        print(counter)
-
         # Check zero positions and empty spaces around the zero positions
-        emptyspaces = empty_space(roll)
+        emptySpaces = empty_space(roll)
 
         # Check if suborder fits in empty space found by emptyspaces function
-        rowpos = 0
-        columnpos = 0
-        for i in range(len(emptyspaces)):
-            if emptyspaces[i][2] >= remainingOrders[0][1] and emptyspaces[i][3] >= remainingOrders[0][0]:
+        rowPos = 0
+        columnPos = 0
+        for i in range(len(emptySpaces)):
+            if emptySpaces[i][2] >= remainingOrders[0][1] and emptySpaces[i][3] >= remainingOrders[0][0]:
                 break
 
         # Save upper left corner from the suborder
-        rowpos = emptyspaces[i][0]
-        columnpos = emptyspaces[i][1]
+        rowPos = emptySpaces[i][0]
+        columnPos = emptySpaces[i][1]
 
         # Save upper right corner from the suborder
-        columnpos_r = emptyspaces[i][1] + remainingOrders[0][1] - 1
+        columnPos_r = emptySpaces[i][1] + remainingOrders[0][1] - 1
 
         # Check empty space above upper right corner
-        possiblewasteright = 0
-        if emptyspaces[i][4] > 0:
+        possibleWasteRight = 0
+        if emptySpaces[i][4] > 0:
             n = 0
-            for m in range(rowpos, 0, -1):
-                if roll[m][columnpos_r] == 0:
+            for m in range(rowPos, 0, -1):
+                if roll[m][columnPos_r] == 0:
                     n += 1
-                if roll[m][columnpos_r] != 0:
+                if roll[m][columnPos_r] != 0:
                     break
-            possiblewasteright = n
+            possibleWasteRight = n
 
         # Check empty space above upper left corner and upper right corner
-        if emptyspaces[i][4] <= possiblewasteright:
-            smallest = emptyspaces[i][4] - 1
+        if emptySpaces[i][4] <= possibleWasteRight:
+            smallest = emptySpaces[i][4] - 1
         else:
-            smallest = possiblewasteright - 1
+            smallest = possibleWasteRight - 1
 
         # Count empty rows above suborder
-        freerows = 0
-        for q in range(rowpos, rowpos - smallest, -1):
-            for r in range(columnpos,columnpos_r):
+        freeRows = 0
+        for q in range(rowPos, rowPos - smallest, -1):
+            for r in range(columnPos, columnPos_r):
                 if roll[q][r] != 0:
                     break
-            freerows += 1
+            freeRows += 1
 
         # If empty space is bigger than 1 move suborder up by amount of freerows
         if smallest > 1:
-            rowpos = rowpos - freerows - 1
+            rowPos = rowPos - freeRows - 1
 
         # Pack suborder and delete suborder from the list
-        roll[rowpos:remainingOrders[0][0]+rowpos,columnpos:remainingOrders[0][1]+columnpos] = counter
+        roll[rowPos:remainingOrders[0][0]+rowPos, columnPos:remainingOrders[0][1]+columnPos] = counter
         remainingOrders.pop(0)
 
         # Go to next order in the list
-        counter +=1
+        counter += 1
+
+    return roll
 
 def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
     """
