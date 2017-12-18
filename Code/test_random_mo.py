@@ -1,6 +1,5 @@
 from helper import *
 from load_orders import *
-import numpy as np
 import random
 import sys
 

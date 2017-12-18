@@ -451,3 +451,73 @@ def visualisation(roll):
     # Create image and show image in computers cmd
     plt.imshow(roll, cmap='gist_ncar')
     plt.show()
+
+def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
+    """
+    This function shuffles the sub orders randomly and places them in the roll in that order.
+    :param remainingOrders: A list of lists of the remaining orders and their specifications.
+    :param orderNum: An int to keep track of the sub order that is being placed.
+    :param rowPos: An int to keep track of the first row position, to determine the rowSpace.
+    :param columnPos: An int to keep track of the first column position, to determine the columnSpace.
+    :param rowPos2: An int to keep track of the second row position, to determine the rowSpace.
+    :param columnPos2: An int to keep track of the second column position, to determine the columnSpace.
+    :param roll: A numpy array in which all the sub orders are placed.
+    :return: Roll with placed sub orders.
+    """
+    # Shuffle remaining orders randomly
+    random.shuffle(remainingOrders)
+
+    # Keep placing sub orders until remainingOrders is empty
+    while remainingOrders:
+        subOrder = remainingOrders[0]
+
+        # Find first zero in row and set to columnPos, else move to row above and rerun function
+        for column in range(roll.shape[1]):
+            if roll[rowPos][column] == 0:
+                columnPos = column
+                break
+            elif column == roll.shape[1] - 1:
+                rowPos += 10
+                pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+
+        # 
+        for column2 in range(roll.shape[1]):
+            if columnPos + column2 == roll.shape[1] - 1 or roll[rowPos][columnPos + column2] != 0:
+                columnPos2 = columnPos + column2
+                break
+        columnSpace = columnPos2 - columnPos + 1
+
+        if roll[rowPos + subOrder[0] - 1][columnPos] == 0  and roll[rowPos + subOrder[0] - 1][columnPos2] == 0:
+
+            for row in range(subOrder[0]):
+                if roll[rowPos + row + 1][columnPos] != 0 or roll[rowPos + row + 1][columnPos2] != 0:
+                    rowPos2 = rowPos + row
+                    break
+
+                if row == subOrder[0] - 1:
+                    rowPos2 = rowPos + subOrder[0] - 1
+
+        else:
+            rowPos += 10
+            columnPos = 0
+            columnPos2 = 0
+            rowPos2 = 0
+            pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+
+        rowSpace = rowPos2 - rowPos + 1
+
+        if subOrder[0] <= rowSpace and subOrder[1] <= columnSpace:
+            orderNum += 1
+            for rows in range(subOrder[0]):
+                for columns in range(subOrder[1]):
+                    roll[rowPos + rows][columnPos + columns] = orderNum
+            remainingOrders.remove(subOrder)
+            rowPos = 0
+            rowPos2 = 0
+            columnPos = 0
+            columnPos2 = 0
+        else:
+            rowPos += 10
+            pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
+
+    return(roll)
