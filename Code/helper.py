@@ -1,6 +1,7 @@
 """
 Helper.py
 Staalmeester case
+-
 This file contains all the functions that are used in the three algorithms.
 The functions are presented in alphabetical order.
 In helper the constants for roll width and roll cost per meter are defined as well.
@@ -82,7 +83,7 @@ def cost(roll):
 
     # Calculate the cost of using roll B
     if roll.shape[1] == ROLL_B:
-        costs = round(meter * COST_B,2)
+        costs = round(meter * COST_B, 2)
         results.append(meter)
         results.append(costs)
         return results
@@ -230,73 +231,89 @@ def pack_bestfit(roll, skyline, bestFit, orderNum):
             roll[row + i][startingCol + j] = orderNum
     return roll
 
-def pack_bottomleft(remainingOrders, roll):
-    """
-    
-    :param roll: 
-    :param remainingOrders: 
-    :return: 
-    """
+def pack_bottom_left(rolltype, order, exercise):
+
+    # Divide maxLength by 2 to make program faster
+    maxLength = int(order.maxLengthRoll / 2)
+
+    # Initialize orderlist, remainingorders, maxlength and create grid of zeroes
+    orderlist = sorted_orders(order.orderlist)
+    roll = create_roll(maxLength, rolltype)
+
+    # Divide orders into parts for exercises
+    if exercise == 1:
+        remainingOrders = orderlist
+    elif exercise == 2:
+        remainingOrders = orderlist[0:30]
+    elif exercise == 3:
+        remainingOrders = orderlist[30:60]
+    elif exercise == 4:
+        remainingOrders = orderlist[0:20]
+    elif exercise == 5:
+        remainingOrders = orderlist[20:40]
+    elif exercise == 6:
+        remainingOrders = orderlist[40:52]
+
+    # Loop through remaining orders and delete suborder if suborder is packed
     counter = 1
     while remainingOrders:
 
-        # Check zero positions and empty spaces around the zero positions
-        emptySpaces = empty_space(roll)
+        # Print ordernumber
+        print("Ordernummer:")
+        print(counter)
 
-        # Check if suborder fits in empty space found by emptySpaces function
-        rowPos = 0
-        columnPos = 0
-        for i in range(len(emptySpaces)):
-            if emptySpaces[i][2] >= remainingOrders[0][1] and emptySpaces[i][3] >= remainingOrders[0][0]:
+        # Check zero positions and empty spaces around the zero positions
+        emptyspaces = empty_space(roll)
+
+        # Check if suborder fits in empty space found by emptyspaces function
+        rowpos = 0
+        columnpos = 0
+        for i in range(len(emptyspaces)):
+            if emptyspaces[i][2] >= remainingOrders[0][1] and emptyspaces[i][3] >= remainingOrders[0][0]:
                 break
 
         # Save upper left corner from the suborder
-        rowPos = emptySpaces[i][0]
-        columnPos = emptySpaces[i][1]
+        rowpos = emptyspaces[i][0]
+        columnpos = emptyspaces[i][1]
 
         # Save upper right corner from the suborder
-        columnPos_r = emptySpaces[i][1] + remainingOrders[0][1] - 1
+        columnpos_r = emptyspaces[i][1] + remainingOrders[0][1] - 1
 
         # Check empty space above upper right corner
-        possibleWasteRight = 0
-        if emptySpaces[i][4] > 0:
+        possiblewasteright = 0
+        if emptyspaces[i][4] > 0:
             n = 0
-            for m in range(rowPos, 0, -1):
-                if roll[m][columnPos_r] == 0:
+            for m in range(rowpos, 0, -1):
+                if roll[m][columnpos_r] == 0:
                     n += 1
-                if roll[m][columnPos_r] != 0:
+                if roll[m][columnpos_r] != 0:
                     break
-            possibleWasteRight = n
+            possiblewasteright = n
 
         # Check empty space above upper left corner and upper right corner
-        if emptySpaces[i][4] <= possibleWasteRight:
-            smallest = emptySpaces[i][4] - 1
+        if emptyspaces[i][4] <= possiblewasteright:
+            smallest = emptyspaces[i][4] - 1
         else:
-            smallest = possibleWasteRight - 1
+            smallest = possiblewasteright - 1
 
         # Count empty rows above suborder
-        freeRows = 0
-        for q in range(rowPos, rowPos - smallest, -1):
-            for r in range(columnPos, columnPos_r):
+        freerows = 0
+        for q in range(rowpos, rowpos - smallest, -1):
+            for r in range(columnpos,columnpos_r):
                 if roll[q][r] != 0:
                     break
-            freeRows += 1
+            freerows += 1
 
         # If empty space is bigger than 1 move suborder up by amount of freerows
         if smallest > 1:
-            rowPos = rowPos - freeRows - 1
+            rowpos = rowpos - freerows - 1
 
         # Pack suborder and delete suborder from the list
-        roll[rowPos:remainingOrders[0][0] + rowPos, columnPos:remainingOrders[0][1] + columnPos] = counter + 1
+        roll[rowpos:remainingOrders[0][0]+rowpos,columnpos:remainingOrders[0][1]+columnpos] = counter
         remainingOrders.pop(0)
 
         # Go to next order in the list
-        counter += 1
-
-    # Return the roll in which al sub orders are placed
-    return roll
-
-
+        counter +=1
 
 def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
     """
@@ -378,6 +395,7 @@ def pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos
             pack_random(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll)
 
     # Return the roll with all sub orders packed into it
+
     return roll
 
 def rotation(subOrder):
@@ -447,6 +465,7 @@ def simulate(orderList, orderNum, rowPos, rowPos2, columnPos, columnPos2, roll):
             if costs[1] < lowestCosts:
                 lowestCosts = costs[1]
                 saveRoll = roll
+
     return saveRoll
 
 def skyline(roll):
