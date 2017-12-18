@@ -11,65 +11,65 @@ rowPos2 = 0
 columnPos = 0
 columnPos2 = 0
 
-# EXERCISE A
-
-# Define orderlist
-remainingOrders = order1.orderlist
-
-# Create roll C
-maxLength = order1.maxLengthRoll
-rollC = create_roll(maxLength, ROLL_C)
-
-# Run random function for 500 times
-rollC = simulate(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, rollC)
-
-# Calculate the cost
-costC = cost(rollC)
-print("For exercise A, using the random algorithm, the length of roll C used (in meters) is: ", costC[0])
-print("The cost for exercise A, using the random algorithm is: ", costC[1])
-
-# Visualise roll with placed orders
-visualisation(rollC)
-
-
-# # EXERCISE B
+# # EXERCISE A
 #
-# # Define the list of orders
-# orderlist = combinedOrders234.orderlist
-#
-# # First half of the orderlist
-# remainingOrdersB = orderlist[0:31]
-#
-# # Second half of the orderlist
-# remainingOrdersC = orderlist[31:62]
-#
-# # Create roll B
-# maxLength = combinedOrders234.maxLengthRoll
-# rollB = create_roll(maxLength, ROLL_B)
+# # Define orderlist
+# remainingOrders = order1.orderlist
 #
 # # Create roll C
-# maxLength = combinedOrders234.maxLengthRoll
+# maxLength = order1.maxLengthRoll
 # rollC = create_roll(maxLength, ROLL_C)
 #
-# # Run random function for 500 times using the first half of the order list for roll B
-# rollB = simulate(remainingOrdersB, orderNum, rowPos, rowPos2, columnPos, columnPos2, rollB)
-#
-# # Run random function for 500 using the second half of the order list for roll C
-# rollC = simulate(remainingOrdersC, orderNum, rowPos, rowPos2, columnPos, columnPos2, rollC)
+# # Run random function for 500 times
+# rollC = simulate(remainingOrders, orderNum, rowPos, rowPos2, columnPos, columnPos2, rollC)
 #
 # # Calculate the cost
-# costB = cost(rollB)
 # costC = cost(rollC)
-# total = costB[1] + costC[1]
-# print("For exercise B, using the random algorithm, the length of roll B used (in meters) is: ", costB[0])
-# print("\r\n")
-# print("The length of roll C used (in meters) is: ", costC[0])
-# print("\r\n")
-# print("The total costs for exercise B, using the random algorithm, are equal to: ", total)
+# print("For exercise A, using the random algorithm, the length of roll C used (in meters) is: ", costC[0])
+# print("The cost for exercise A, using the random algorithm is: ", costC[1])
 #
-# # Visualise rolls with placed orders
-# visualisation(rollB)
+# # Visualise roll with placed orders
 # visualisation(rollC)
+
+
+# EXERCISE B
+
+# Define the list of orders
+orderlist = combinedOrders234.orderlist
+
+# First half of the orderlist
+remainingOrdersB = orderlist[0:31]
+
+# Second half of the orderlist
+remainingOrdersC = orderlist[31:62]
+
+# Create roll B
+maxLength = combinedOrders234.maxLengthRoll
+rollB = create_roll(maxLength, ROLL_B)
+
+# Create roll C
+maxLength = combinedOrders234.maxLengthRoll
+rollC = create_roll(maxLength, ROLL_C)
+
+# Run random function for 500 times using the first half of the order list for roll B
+rollB = simulate(remainingOrdersB, orderNum, rowPos, rowPos2, columnPos, columnPos2, rollB)
+
+# Run random function for 500 using the second half of the order list for roll C
+rollC = simulate(remainingOrdersC, orderNum, rowPos, rowPos2, columnPos, columnPos2, rollC)
+
+# Calculate the cost
+costB = cost(rollB)
+costC = cost(rollC)
+total = costB[1] + costC[1]
+print("For exercise B, using the random algorithm, the length of roll B used (in meters) is: ", costB[0])
+print("\r\n")
+print("The length of roll C used (in meters) is: ", costC[0])
+print("\r\n")
+print("The total costs for exercise B, using the random algorithm, are equal to: ", total)
+
+# Visualise rolls with placed orders
+visualisation(rollB)
+visualisation(rollC)
 
 
 # # EXERCISE C
