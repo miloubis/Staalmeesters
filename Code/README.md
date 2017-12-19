@@ -8,6 +8,10 @@ The first number of an order for a rectangle is height, the second number is wid
 ## Algorithms
 - Bestfit
 - Bottomleft
+- Random
+
+### Usage
+You can run each exercise (a/b/c) in each algorithm by uncommenting the exercise you would like to run.
 
 ## Supporting files
 - Classes
